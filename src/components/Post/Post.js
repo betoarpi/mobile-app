@@ -1,5 +1,6 @@
 import React from 'react';
-import { View, Text, StyleSheet, Image, YellowBox } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import moment from 'moment';
 import HTML from 'react-native-render-html';
 
@@ -15,8 +16,11 @@ const Post = (props) => {
     title,
     excerpt,
     likes,
+    postId,
     theme
   } = props;
+  const navigation = useNavigation();
+  const handlePress = () => navigation.navigate('Full Post', { postId: postId });
   return (
     <CardContainer style={styles.shadow}>
       {featuredImage && <FeaturedImage source={{ uri: featuredImage.sourceUrl }} />}
@@ -28,7 +32,7 @@ const Post = (props) => {
             </IconContainer>
           }
           <Container style={{ paddingHorizontal: 0 }}>
-            <Title>{title}</Title>
+            <Title onPress={handlePress}>{title}</Title>
             <Date>{moment(date).format('MMM DD, YYYY')}</Date>
             <Location>Location missing</Location>
           </Container>
@@ -67,7 +71,7 @@ const styles = StyleSheet.create({
 
     elevation: 3,
   }
-})
+});
 
 //HTML Component Styles
 const htmlStyles = {

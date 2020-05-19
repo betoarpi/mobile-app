@@ -1,4 +1,5 @@
 import React from 'react';
+import { StyleSheet } from 'react-native';
 import * as Icons from '../Icons';
 import { Navigation, WeekDay, Day, Date } from './Styles';
 import Theme from '../../theme/Theme';

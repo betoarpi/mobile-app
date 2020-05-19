@@ -1,57 +1,104 @@
-import React, { useEffect } from 'react';
-import { StatusBar } from 'react-native';
+import 'react-native-gesture-handler';
+import React from 'react';
+import { StyleSheet } from 'react-native';
 import { ThemeProvider } from 'styled-components';
-import { ApolloProvider } from 'react-apollo';
-
-import client from './src/apollo/client';
 import Theme from './src/theme/Theme';
-import Header from './src/components/Header';
-import { MainLayout } from './src/theme/Styles';
-import MainMenu from './src/components/MainMenu';
-import Home from './src/screens/Home';
-/* import PostListSkeleton from './src/containers/PostListSkeleton'; */
-/* import FullPost from './src/screens/FullPost'; */
-/* import WeeklyMenu from './src/screens/WeeklyMenu'; */
-/* import WeeklyMenuSkeleton from './src/containers/WeeklyMenuSkeleton'; */
-/* import Splash from './src/screens/Splash'; */
-/* import Onboarding from './src/screens/Onboarding'; */
-/* import Settings from './src/screens/Settings'; */
-/* import UpcomingEvents from './src/screens/UpcomingEvents'; */
-/* import SchoolInformation from './src/screens/SchoolInformation'; */
-/* import Page from './src/screens/Page'; */
-/* import PostsSearch from './src/components/Post/PostsSearch'; */
-import APi from './src/Utils/EventsAPI';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
-const App: () => React$Node = () => {
-  useEffect(() => {
-    APi.getEvents()
-  })
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
+
+import Layout from './src/containers/Layout';
+
+import Home from './src/screens/Home';
+import FullPost from './src/screens/FullPost';
+
+import WeeklyMenu from './src/screens/WeeklyMenu';
+import UpcomingEvents from './src/screens/UpcomingEvents';
+import Settings from './src/screens/Settings';
+
+const MenuTabs = createMaterialBottomTabNavigator();
+
+const Stack = createStackNavigator();
+
+
+const App = () => {
+  const HomeStack = () => {
+    return (
+      <Stack.Navigator>
+        <Stack.Screen name='Home'
+          options={{
+            title: 'School Name'
+          }}
+        >
+          {props => <Layout><Home {...props} theme={Theme} /></Layout>}
+        </Stack.Screen>
+        <Stack.Screen name='Full Post'
+          options={{
+            title: 'Back to Feed'
+          }}
+        >
+          {props => <Layout><FullPost {...props} theme={Theme} /></Layout>}
+        </Stack.Screen>
+      </Stack.Navigator>
+    )
+  }
   return (
-    <ApolloProvider client={client}>
-      <ThemeProvider theme={Theme}>
-        <StatusBar barStyle="light-content" />
-        <Header
-          title='Section title'
-          school='Custom School Name'
-          currentScreen='generic' />
-        <MainLayout>
-          <Home theme={Theme} />
-          {/* <FullPost theme={Theme} /> */}
-          {/* <WeeklyMenu /> */}
-          {/* <PostListSkeleton /> */}
-          {/* <WeeklyMenuSkeleton /> */}
-          {/* <Splash /> */}
-          {/* <Onboarding /> */}
-          {/* <Settings /> */}
-          {/* <UpcomingEvents theme={Theme} /> */}
-          {/* <SchoolInformation /> */}
-          {/* <Page /> */}
-          {/* <PostsSearch /> */}
-        </MainLayout>
-        <MainMenu />
-      </ThemeProvider>
-    </ApolloProvider>
+    <ThemeProvider theme={Theme}>
+      <NavigationContainer>
+        <MenuTabs.Navigator
+          barStyle={{ backgroundColor: '#ffffff' }}
+        >
+          <MenuTabs.Screen name="Home"
+            component={HomeStack}
+            options={{
+              tabBarLabel: 'Home',
+              tabBarIcon: () => (
+                <Icon style={styles.icon} size={24} name={'home'} />
+              )
+            }}
+          />
+          <MenuTabs.Screen name="Menu"
+            options={{
+              tabBarLabel: 'Menus',
+              tabBarIcon: () => (
+                <Icon style={styles.icon} size={24} name={'room-service'} />
+              )
+            }}
+          >
+            {props => <Layout><WeeklyMenu {...props} theme={Theme} /></Layout>}
+          </MenuTabs.Screen>
+          <MenuTabs.Screen name="Events"
+            options={{
+              tabBarLabel: 'Menus',
+              tabBarIcon: () => (
+                <Icon style={styles.icon} size={24} name={'calendar-today'} />
+              )
+            }}
+          >
+            {props => <Layout><UpcomingEvents {...props} theme={Theme} /></Layout>}
+          </MenuTabs.Screen>
+          <MenuTabs.Screen name="Settings"
+            options={{
+              tabBarLabel: 'Settings',
+              tabBarIcon: () => (
+                <Icon style={styles.icon} size={24} name={'dots-horizontal-circle'} />
+              )
+            }}
+          >
+            {props => <Layout><Settings {...props} theme={Theme} /></Layout>}
+          </MenuTabs.Screen>
+        </MenuTabs.Navigator>
+      </NavigationContainer>
+    </ThemeProvider>
   );
 };
+
+const styles = StyleSheet.create({
+  icon: {
+    color: 'gray',
+  }
+});
 
 export default App;

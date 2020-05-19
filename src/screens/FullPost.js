@@ -1,34 +1,87 @@
 import React from 'react';
 import {
-  View, SafeAreaView, StyleSheet
+  View,
+  StyleSheet,
+  Text,
+  ScrollView,
+  Image
 } from 'react-native';
-import { FeaturedImage, MainImg, IconContainer, PostHeader, PostHeaderContainer, PostDetails, Title, Paragraph, Container } from '../theme/Styles';
-import * as Icons from '../components/Icons';
+import { Query } from 'react-apollo';
+import gql from 'graphql-tag';
+import moment from 'moment';
+import HTML from 'react-native-render-html';
 
-const FullPost = () => {
+import { Icon, IconContainer, PostHeader, PostHeaderContainer, PostDetails, Title, Container } from '../theme/Styles';
+import PostSkeleton from '../components/Post/PostSkeleton';
+import DataError from '../components/DataError';
+
+const POST_QUERY = gql`
+  query POST_QUERY($postId: Int) {
+    postBy(postId: $postId) {
+      databaseId
+      title
+      date
+      content
+      featuredImage {
+        id
+        sourceUrl
+      }
+      categories {
+        edges {
+          node {
+            categoryIcon {
+              categoryIcon {
+                sourceUrl(size: MEDIUM)
+              }
+            }
+            slug
+          }
+        }
+      }
+    }
+  }
+`
+
+const FullPost = ({ route }) => {
+  const postId = route.params.postId;
   return (
-    <View>
-      <SafeAreaView>
-        <FeaturedImage>
-          <MainImg source={require('../images/college-football.jpg')} />
-        </FeaturedImage>
-        <PostHeader style={styles.shadow}>
-          <IconContainer>
-            <Icons.Football fill='#ffffff' />
-          </IconContainer>
-          <PostHeaderContainer>
-            <Title>News Title</Title>
-            <PostDetails>Details 1</PostDetails>
-            <PostDetails>Details 2</PostDetails>
-          </PostHeaderContainer>
-        </PostHeader>
-        <Container>
-          <Paragraph>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Sit amet purus gravida quis blandit. Pellentesque elit ullamcorper dignissim cras tincidunt lobortis feugiat vivamus. Sapien faucibus et molestie ac feugiat. Maecenas volutpat blandit aliquam etiam erat velit scelerisque. Aliquam ultrices sagittis orci a scelerisque. Accumsan lacus vel facilisis volutpat est velit egestas dui. Pretium lectus quam id leo in vitae turpis. </Paragraph>
-          <Title>Subtitle</Title>
-          <Paragraph>Sit amet purus gravida quis blandit. Pellentesque elit ullamcorper dignissim cras tincidunt lobortis feugiat vivamus. Sapien faucibus et molestie ac feugiat. Maecenas volutpat blandit aliquam etiam erat velit scelerisque. Aliquam ultrices sagittis orci a scelerisque. Accumsan lacus vel facilisis volutpat est velit egestas dui. Pretium lectus quam id leo in vitae turpis. </Paragraph>
-        </Container>
-      </SafeAreaView>
-    </View>
+    <Query query={POST_QUERY} variables={{ postId }}>
+      {({ loading, error, data }) => {
+        if (loading) return <PostSkeleton />;
+        if (error) return <DataError />;
+        if (!data) return <Text>There is no data.</Text>
+
+        const {
+          categories,
+          date,
+          featuredImage,
+          title,
+          content,
+        } = data.postBy;
+
+        console.log(featuredImage.sourceUrl);
+        return (
+          <ScrollView>
+            {featuredImage && <Image source={{ uri: featuredImage.sourceUrl }} style={styles.mainImage} />}
+            <PostHeader style={styles.shadow}>
+              {categories.edges.length > 0 &&
+                <IconContainer>
+                  <Icon style={{ width: 24, height: 24 }} source={{ uri: categories.edges[0].node.categoryIcon.categoryIcon.sourceUrl }} />
+                </IconContainer>
+              }
+              <PostHeaderContainer>
+                <Title>{title}</Title>
+                <PostDetails>{moment(date).format('MMM DD, YYYY')}</PostDetails>
+                <PostDetails>Location Missing</PostDetails>
+              </PostHeaderContainer>
+            </PostHeader>
+            <Container>
+              <HTML html={content} baseFontStyle={{ fontFamily: 'Lato-Regular' }} {...htmlStyles} />
+            </Container>
+          </ScrollView>
+        )
+      }}
+    </Query>
   );
 };
 
@@ -43,7 +96,21 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
 
     elevation: 4,
+  },
+  mainImage: {
+    height: 212,
+    resizeMode: 'cover',
   }
-})
+});
+
+//HTML Component Styles
+const htmlStyles = {
+  tagsStyles: {
+    p: {
+      fontSize: 18,
+      marginBottom: 16,
+    }
+  }
+};
 
 export default FullPost;

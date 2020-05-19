@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, SafeAreaView, Text } from 'react-native';
+import { Text } from 'react-native';
 import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
 
@@ -13,6 +13,7 @@ const ALL_POSTS_QUERY = gql`
       edges {
         node {
           databaseId
+          postId
           title
           date
           excerpt
@@ -36,7 +37,7 @@ const ALL_POSTS_QUERY = gql`
       }
       pageInfo {
         endCursor
-        startCursor
+        startCursor 
         hasNextPage
         hasPreviousPage
       }

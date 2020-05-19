@@ -35,6 +35,13 @@ export const Title = styled.Text`
   font-family: 'Muli-Bold';
   margin-bottom:5px;
 `
+export const ButtonTitle = styled.Button`
+  color: ${({ theme }) => theme.colors.primary};
+  font-size:18px;
+  font-weight: bold;
+  font-family: 'Muli-Bold';
+  margin-bottom:5px;
+`
 export const Content = styled.Text`
   font-size:18px;
   margin-bottom:13px;

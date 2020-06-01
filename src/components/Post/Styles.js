@@ -46,15 +46,13 @@ export const Title = styled.Text`
   margin-bottom:8px;
 `
 export const Date = styled.Text`
-  color: ${({ theme }) => theme.colors.text};
-  font-family: 'Lato-Light';
+  color: ${({ theme }) => theme.colors.icon};
   font-size: ${({ theme }) => theme.fontSizes.titles};
   flex:1 1 auto;
   flex-wrap: wrap;
 `
 export const Location = styled.Text`
-  color: ${({ theme }) => theme.colors.text};
-  font-family: 'Lato-Light';
+  color: ${({ theme }) => theme.colors.icon};
   font-size: ${({ theme }) => theme.fontSizes.titles};
   flex:1 1 auto;
   flex-wrap: wrap;

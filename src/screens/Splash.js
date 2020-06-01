@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Image } from 'react-native';
+import { Image } from 'react-native';
 import styled from 'styled-components';
 
 const Logo = styled.View`
@@ -7,13 +7,27 @@ const Logo = styled.View`
   justify-content: center;
   align-items: center;
 `
+const LoadingText = styled.Text`
+  font-size: 24px;
+`
 
-const Splash = () => {
-  return (
-    <Logo>
-      <Image source={require('../images/ogs_logo.png')} />
-    </Logo>
-  );
+const Splash = (props) => {
+  const { data, logo } = props;
+  if (data) {
+    return (
+      <Logo>
+        <Image source={logo} />
+      </Logo>
+    );
+  } else {
+    return (
+      <Logo>
+        <LoadingText>
+          {logo}
+        </LoadingText>
+      </Logo>
+    )
+  }
 };
 
 export default Splash;

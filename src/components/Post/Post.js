@@ -17,7 +17,7 @@ const Post = (props) => {
     excerpt,
     likes,
     postId,
-    theme
+    theme,
   } = props;
   const navigation = useNavigation();
   const handlePress = () => navigation.navigate('Full Post', { postId: postId });

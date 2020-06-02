@@ -9,7 +9,7 @@ import moment from 'moment';
 import EventsCalendar from '../components/EventsCalendar';
 
 const PostList = (props) => {
-  const { theme, data, fetchMore, venuesList, organizersList, selectedDate, handleDate, highlightedDate } = props;
+  const { theme, data, fetchMore, venuesList, organizersList, selectedDate, handleDate } = props;
 
   const loadMoreData = () => {
     fetchMore({

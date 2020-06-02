@@ -8,7 +8,7 @@ import * as Icons from './Icons';
 import moment from 'moment';
 
 const EventsCalendar = (props) => {
-  const { theme, handleDate, events, footerText } = props;
+  const { theme, handleDate, events } = props;
 
   const [eventDates, setEventDates] = useState({});
   const [viewedDate, setViewedDate] = useState(moment().format('MMM DD, YYYY'));
@@ -27,6 +27,7 @@ const EventsCalendar = (props) => {
     (function handleMarkedDates() {
       events.edges.map(item => {
         const validCategory = item.node.eventCategories.edges[0].node.slug !== 'lunch-menu';
+        const validPostType = item.node.__typename;
         if (validCategory === true) {
           eventDatesArray[moment(item.node.start_date).format('YYYY-MM-DD')] = { marked: true, selected: false }
         }

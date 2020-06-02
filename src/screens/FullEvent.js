@@ -11,13 +11,15 @@ import moment from 'moment';
 import HTML from 'react-native-render-html';
 
 import { Icon, IconContainer, PostHeader, PostHeaderContainer, PostDetails, Title, Container } from '../theme/Styles';
+import { Date, Location } from '../components/Post/Styles';
+import Theme from '../theme/Theme';
 import PostSkeleton from '../components/Post/PostSkeleton';
 import DataError from '../components/DataError';
 
 const EVENT_QUERY = gql`
   query EVENT_QUERY($eventId: Int) {
     eventBy(eventId: $eventId) {
-      eventId
+      databaseId
       title
       date
       content
@@ -46,8 +48,14 @@ const EVENT_QUERY = gql`
   }
 `
 
+
 const FullEvent = ({ route }) => {
   const eventId = route.params.eventId;
+  const venuesList = route.params.venuesList;
+  const organizersList = route.params.organizersList;
+
+  console.log(venuesList)
+
   return (
     <Query query={EVENT_QUERY} variables={{ eventId }}>
       {({ loading, error, data }) => {
@@ -64,14 +72,15 @@ const FullEvent = ({ route }) => {
           end_date,
           all_day,
           venue,
-          venuesList,
           selectedDate,
-          organizers,
           featuredImage,
           eventCategories,
         } = data.eventBy;
 
-        console.log(featuredImage.sourceUrl);
+        const eventVenue = venuesList.edges.filter(filtered => filtered.node.databaseId === parseInt(venue));
+
+        console.log(all_day !== 'yes')
+
         return (
           <ScrollView>
             {featuredImage !== null && <Image source={{ uri: featuredImage.sourceUrl }} style={styles.mainImage} />}
@@ -83,8 +92,12 @@ const FullEvent = ({ route }) => {
               }
               <PostHeaderContainer>
                 <Title>{title}</Title>
-                <PostDetails>{moment(date).format('MMM DD, YYYY')}</PostDetails>
-                <PostDetails>Location Missing</PostDetails>
+                {all_day !== 'yes' ?
+                  <Date>{moment(start_date).format('MMM DD, YYYY')}</Date>
+                  :
+                  <Date>All Day</Date>
+                }
+                {venue && <Location>{eventVenue.map(element => element.node.title)}</Location>}
               </PostHeaderContainer>
             </PostHeader>
             <Container>
@@ -121,6 +134,57 @@ const htmlStyles = {
     p: {
       fontSize: 18,
       marginBottom: 16,
+      lineHeight: 26
+    },
+    a: {
+      color: Theme.colors.primary,
+      fontSize: 18,
+      marginBottom: 16,
+      lineHeight: 26
+    },
+    img: {
+      borderRadius: 10,
+      overflow: 'hidden',
+    },
+    hr: {
+      borderBottomWidth: 1,
+      borderBottomColor: 'gray',
+      marginBottom: 32,
+      marginTop: 16,
+    },
+    ul: {
+      fontSize: 18,
+      marginBottom: 16,
+      lineHeight: 26
+    },
+    ol: {
+      fontSize: 18,
+      marginBottom: 16,
+      lineHeight: 26
+    },
+    h1: {
+      fontSize: 32.44,
+      marginBottom: 16
+    },
+    h2: {
+      fontSize: 28.83,
+      marginBottom: 16
+    },
+    h3: {
+      fontSize: 25.63,
+      marginBottom: 16
+    },
+    h4: {
+      fontSize: 22.78,
+      marginBottom: 16
+    },
+    h5: {
+      fontSize: 20.25,
+      marginBottom: 16
+    },
+    h6: {
+      fontSize: 18,
+      marginBottom: 16
     }
   }
 };

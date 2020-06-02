@@ -8,28 +8,71 @@ import PostListSkeleton from '../containers/PostListSkeleton';
 import DataError from '../components/DataError';
 
 const ALL_POSTS_QUERY = gql`
-  query ALL_POSTS_QUERY( $cursor: String) {
-    posts(first: 12, where: {status: PUBLISH}, after: $cursor) {
+  query ALL_POSTS_QUERY($cursor: String) {
+    contentNodes(first: 12, where: {status: PUBLISH}, after: $cursor) {
       edges {
         node {
-          databaseId
-          postId
-          title
-          date
-          excerpt
-          featuredImage {
-            id
-            sourceUrl
-          }
-          categories {
-            edges {
-              node {
-                categoryIcon {
+          __typename
+          ... on Post {
+            databaseId
+            postId
+            title
+            date
+            excerpt
+            featuredImage {
+              id
+              sourceUrl
+            }
+            categories {
+              edges {
+                node {
                   categoryIcon {
-                    sourceUrl(size: MEDIUM)
+                    categoryIcon {
+                      sourceUrl(size: MEDIUM)
+                    }
+                  }
+                  slug
+                }
+              }
+            }
+            contentType {
+              node {
+                name
+              }
+            }
+          }
+          __typename
+          ... on Event {
+            eventId
+            databaseId
+            title
+            start_date
+            end_date
+            all_day
+            eventCategories {
+              edges {
+                node {
+                  name
+                  slug
+                  categoryIcon {
+                    categoryIcon {
+                      sourceUrl
+                    }
                   }
                 }
-                slug
+              }
+            }
+            excerpt
+            cost
+            venue
+            organizer
+            featuredImage {
+              id
+              sourceUrl
+            }
+            contentType {
+              node {
+                name
               }
             }
           }
@@ -37,9 +80,25 @@ const ALL_POSTS_QUERY = gql`
       }
       pageInfo {
         endCursor
-        startCursor 
         hasNextPage
         hasPreviousPage
+        startCursor
+      }
+    }
+    eventVenues {
+      edges {
+        node {
+          title
+          databaseId
+        }
+      }
+    }
+    eventOrganizers {
+      edges {
+        node {
+          title
+          databaseId
+        }
       }
     }
   }
@@ -52,9 +111,14 @@ const Home = (props) => {
       {({ loading, error, data, fetchMore }) => {
         if (loading) return <PostListSkeleton />;
         if (error) return <DataError />;
-        if (!data.posts.edges.length) return <Text>There are no posts.</Text>;
+        if (!data.contentNodes.edges.length) return <Text>There are no posts.</Text>;
         return (
-          <PostList data={data.posts} theme={theme} fetchMore={fetchMore} />
+          <PostList
+            data={data.contentNodes}
+            venuesList={data.eventVenues}
+            organizersList={data.eventOrganizers}
+            theme={theme}
+            fetchMore={fetchMore} />
         );
       }}
     </Query >

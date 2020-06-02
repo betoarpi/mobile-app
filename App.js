@@ -63,7 +63,7 @@ function App() {
           } />;
           if (error) return <Text>Error! {error.message}</Text>;
 
-          console.log(data);
+          //console.log(data);
 
           const schoolTheme = {
             dark: false,
@@ -93,7 +93,11 @@ function App() {
                 </Stack.Screen>
                 <Stack.Screen name='Full Post'
                   options={{
-                    title: 'Back to Feed'
+                    title: 'Back to Feed',
+                    headerStyle: {
+                      backgroundColor: schoolTheme.colors.primary
+                    },
+                    headerTintColor: schoolTheme.colors.card,
                   }}
                 >
                   {props => <Layout><FullPost {...props} theme={Theme} /></Layout>}
@@ -118,7 +122,11 @@ function App() {
                 </Stack.Screen>
                 <Stack.Screen name='Full Event'
                   options={{
-                    title: 'Back to Events Calendar'
+                    title: 'Back to Events Calendar',
+                    headerStyle: {
+                      backgroundColor: schoolTheme.colors.primary
+                    },
+                    headerTintColor: schoolTheme.colors.card,
                   }}
                 >
                   {props => <Layout><FullEvent {...props} theme={Theme} /></Layout>}

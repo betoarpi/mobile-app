@@ -20,7 +20,7 @@ const Post = (props) => {
     theme,
   } = props;
   const navigation = useNavigation();
-  const handlePress = () => navigation.navigate('Full Post', { postId: postId });
+  const handlePress = () => navigation.navigate('Full Post', { postId: postId, theme: theme });
   return (
     <CardContainer style={styles.shadow}>
       {featuredImage && <FeaturedImage source={{ uri: featuredImage.sourceUrl }} />}

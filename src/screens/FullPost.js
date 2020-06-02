@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  View,
+  Dimensions,
   StyleSheet,
   Text,
   ScrollView,
@@ -12,6 +12,7 @@ import moment from 'moment';
 import HTML from 'react-native-render-html';
 
 import { Icon, IconContainer, PostHeader, PostHeaderContainer, PostDetails, Title, Container } from '../theme/Styles';
+import Theme from '../theme/Theme';
 import PostSkeleton from '../components/Post/PostSkeleton';
 import DataError from '../components/DataError';
 
@@ -59,7 +60,7 @@ const FullPost = ({ route }) => {
           content,
         } = data.postBy;
 
-        console.log(featuredImage.sourceUrl);
+        console.log(Dimensions.get('window').width - 92);
         return (
           <ScrollView>
             {featuredImage && <Image source={{ uri: featuredImage.sourceUrl }} style={styles.mainImage} />}
@@ -76,7 +77,11 @@ const FullPost = ({ route }) => {
               </PostHeaderContainer>
             </PostHeader>
             <Container>
-              <HTML html={content} baseFontStyle={{ fontFamily: 'Lato-Regular' }} {...htmlStyles} />
+              <HTML
+                html={content}
+                baseFontStyle={{ fontFamily: 'Lato-Regular' }}
+                imagesMaxWidth={Dimensions.get('window').width - 48}
+                {...htmlStyles} />
             </Container>
           </ScrollView>
         )
@@ -109,6 +114,57 @@ const htmlStyles = {
     p: {
       fontSize: 18,
       marginBottom: 16,
+      lineHeight: 26
+    },
+    a: {
+      color: Theme.colors.primary,
+      fontSize: 18,
+      marginBottom: 16,
+      lineHeight: 26
+    },
+    img: {
+      borderRadius: 10,
+      overflow: 'hidden',
+    },
+    hr: {
+      borderBottomWidth: 1,
+      borderBottomColor: 'gray',
+      marginBottom: 32,
+      marginTop: 16,
+    },
+    ul: {
+      fontSize: 18,
+      marginBottom: 16,
+      lineHeight: 26
+    },
+    ol: {
+      fontSize: 18,
+      marginBottom: 16,
+      lineHeight: 26
+    },
+    h1: {
+      fontSize: 32.44,
+      marginBottom: 16
+    },
+    h2: {
+      fontSize: 28.83,
+      marginBottom: 16
+    },
+    h3: {
+      fontSize: 25.63,
+      marginBottom: 16
+    },
+    h4: {
+      fontSize: 22.78,
+      marginBottom: 16
+    },
+    h5: {
+      fontSize: 20.25,
+      marginBottom: 16
+    },
+    h6: {
+      fontSize: 18,
+      marginBottom: 16
     }
   }
 };

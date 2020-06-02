@@ -20,11 +20,16 @@ const Post = (props) => {
     excerpt,
     venue,
     venuesList,
+    organizersList,
     selectedDate,
     show
   } = props;
   const navigation = useNavigation();
-  const handlePress = () => navigation.navigate('Full Event', { eventId: eventId });
+  const handlePress = () => navigation.navigate('Full Event', {
+    eventId: eventId,
+    venuesList: venuesList,
+    organizersList: organizersList
+  });
 
   const eventVenue = venuesList.edges.filter(filtered => filtered.node.eventId === parseInt(venue));
 

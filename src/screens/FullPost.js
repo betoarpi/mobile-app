@@ -11,7 +11,8 @@ import gql from 'graphql-tag';
 import moment from 'moment';
 import HTML from 'react-native-render-html';
 
-import { Icon, IconContainer, PostHeader, PostHeaderContainer, PostDetails, Title, Container } from '../theme/Styles';
+import { Icon, IconContainer, PostHeader, PostHeaderContainer, Title, Container } from '../theme/Styles';
+import { Date } from '../components/Post/Styles';
 import Theme from '../theme/Theme';
 import PostSkeleton from '../components/Post/PostSkeleton';
 import DataError from '../components/DataError';
@@ -72,8 +73,7 @@ const FullPost = ({ route }) => {
               }
               <PostHeaderContainer>
                 <Title>{title}</Title>
-                <PostDetails>{moment(date).format('MMM DD, YYYY')}</PostDetails>
-                <PostDetails>Location Missing</PostDetails>
+                <Date>{moment(date).format('MMM DD, YYYY')}</Date>
               </PostHeaderContainer>
             </PostHeader>
             <Container>

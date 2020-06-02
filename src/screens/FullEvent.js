@@ -54,7 +54,7 @@ const FullEvent = ({ route }) => {
   const venuesList = route.params.venuesList;
   const organizersList = route.params.organizersList;
 
-  console.log(venuesList)
+  console.log(organizersList)
 
   return (
     <Query query={EVENT_QUERY} variables={{ eventId }}>
@@ -73,13 +73,15 @@ const FullEvent = ({ route }) => {
           all_day,
           venue,
           selectedDate,
+          organizer,
           featuredImage,
           eventCategories,
         } = data.eventBy;
 
         const eventVenue = venuesList.edges.filter(filtered => filtered.node.databaseId === parseInt(venue));
+        const eventOrganizer = organizersList.edges.filter(filtered => filtered.node.databaseId === parseInt(organizer));
 
-        console.log(all_day !== 'yes')
+        console.log(eventOrganizer)
 
         return (
           <ScrollView>
@@ -98,6 +100,7 @@ const FullEvent = ({ route }) => {
                   <Date>All Day</Date>
                 }
                 {venue && <Location>{eventVenue.map(element => element.node.title)}</Location>}
+                {organizer && <Location>Organized by {`${eventOrganizer.map(element => element.node.title)}`}</Location>}
               </PostHeaderContainer>
             </PostHeader>
             <Container>

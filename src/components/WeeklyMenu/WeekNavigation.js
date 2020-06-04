@@ -1,33 +1,38 @@
 import React from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, TouchableWithoutFeedback } from 'react-native';
+import moment from 'moment';
 import * as Icons from '../Icons';
 import { Navigation, WeekDay, Day, Date } from './Styles';
 import Theme from '../../theme/Theme';
 
-const WeekNavigation = () => {
+const WeekNavigation = ({ weekDates, calendarDate, handleDateToShow }) => {
+
+  const week = Object.entries(weekDates).map((key) => {
+    const day = key[0];
+    const date = key[1];
+    const isActive = calendarDate === key[1];
+
+    return (
+      <TouchableWithoutFeedback
+        key={key[0]}
+        dataDay={key[0]}
+        onPress={() => {
+          handleDateToShow(key[0])
+        }}
+        style={{ borderWidth: 1, borderColor: 'red' }}
+      >
+        <WeekDay active={isActive}>
+          <Day>{day}</Day>
+          <Date active={isActive}>{date}</Date>
+        </WeekDay>
+      </TouchableWithoutFeedback>
+    )
+  })
+
   return (
     <Navigation style={styles.shadow}>
       <Icons.ArrowLeft fill={Theme.colors.primary} />
-      <WeekDay>
-        <Day>Mon</Day>
-        <Date>13</Date>
-      </WeekDay>
-      <WeekDay active={true}>
-        <Day>Tue</Day>
-        <Date active={true}>14</Date>
-      </WeekDay>
-      <WeekDay>
-        <Day>Mie</Day>
-        <Date>15</Date>
-      </WeekDay>
-      <WeekDay>
-        <Day>Jue</Day>
-        <Date>16</Date>
-      </WeekDay>
-      <WeekDay>
-        <Day>Vie</Day>
-        <Date>17</Date>
-      </WeekDay>
+      {week}
       <Icons.ArrowRight fill={Theme.colors.primary} />
     </Navigation>
   );

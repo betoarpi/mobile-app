@@ -2,7 +2,7 @@ import React from 'react';
 import { View, FlatList, StyleSheet } from 'react-native';
 import WeekNavigation from '../components/WeeklyMenu/WeekNavigation';
 import { FeaturedImage, MainImg, IconContainer, PostHeader, PostHeaderContainer, PostDetails, Title, Paragraph, Note, LikesRow, LikesText } from '../theme/Styles';
-import * as Icons from '../components/Icons';
+import {Ionicons} from '@expo/vector-icons';
 import Theme from '../theme/Theme';
 
 const WeeklyMenu = () => {
@@ -24,7 +24,7 @@ const WeeklyMenu = () => {
       </FeaturedImage >
       <PostHeader style={styles.shadow}>
         <IconContainer>
-          <Icons.Food fill='#ffffff' />
+          <Ionicons name={'md-pizza'} size={24} color={'#ffffff'} />
         </IconContainer>
         <PostHeaderContainer>
           <Title>This is the menu</Title>
@@ -43,7 +43,7 @@ const WeeklyMenu = () => {
           keyExtractor={item => item.id}
         />
         <LikesRow>
-          <Icons.Like fill={Theme.colors.primary} />
+          <Ionicons name={'ios-thumbs-up'} size={24} color={Theme.colors.primary} />
           <LikesText>
             22 Likes
           </LikesText>

@@ -6,6 +6,7 @@ import SettingsItem from '../components/SettingsItem';
 import PrimaryButton from '../components/PrimaryButton';
 import { TextContainer, Paragraph, Separator } from '../theme/Styles';
 import Theme from '../theme/Theme';
+import {Ionicons} from '@expo/vector-icons';
 
 const Settings = () => {
   const SettingsData = [
@@ -49,7 +50,7 @@ const Settings = () => {
         <PrimaryButton
           text='Get Started'
         >
-          <Icons.ArrowRight fill={Theme.colors.overPrimary} />
+          <Ionicons name={'ios-arrow-dropright'} size={24} color={Theme.colors.overPrimary} />
         </PrimaryButton>
       </ButtonContainer>
     </SettingsLayout >

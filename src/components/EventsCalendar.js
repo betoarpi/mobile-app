@@ -3,7 +3,7 @@ import { StyleSheet } from 'react-native';
 import { Calendar } from 'react-native-calendars';
 import styled from 'styled-components';
 import { Title } from '../theme/Styles';
-import * as Icons from './Icons';
+import {Ionicons} from '@expo/vector-icons';
 
 import moment from 'moment';
 
@@ -15,9 +15,9 @@ const EventsCalendar = (props) => {
 
   const renderArrow = (direction) => {
     if (direction === 'left') {
-      return <Icons.ArrowLeft fill={`${theme.colors.primary}`} />
+      return <Ionicons name={'ios-arrow-dropleft'} size={24} color={theme.colors.primary} />
     } else {
-      return <Icons.ArrowRight fill={`${theme.colors.primary}`} />
+      return <Ionicons name={'ios-arrow-dropright'} size={24} color={theme.colors.primary} />
     }
   };
 

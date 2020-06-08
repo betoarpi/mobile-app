@@ -1,4 +1,38 @@
 {
-  "name": "WonderSchools",
-  "displayName": "WonderSchools"
+  "expo": {
+    "name": "Wonder School",
+    "slug": "wonder-school",
+    "privacy": "public",
+    "sdkVersion": "37.0.0",
+    "platforms": [
+      "ios",
+      "android"
+    ],
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./src/images/icon.png",
+    "splash": {
+      "backgroundColor": "#cccccc"
+    },
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "bundleIdentifier": "com.wonder.wonderschool",
+      "supportsTablet": true,
+      "infoPlist": {
+        "UIBackgroundModes": [
+          "audio"
+        ]
+      },
+      "buildNumber": "1.0.0"
+    },
+    "android": {
+      "package": "com.wonder.wonderschool",
+      "versionCode": 1
+    }
+  }
 }

@@ -6,7 +6,7 @@ import HTML from 'react-native-render-html';
 
 import { CardContainer, FeaturedImage, Header, Container, Title, Date, Location, LikesRow } from './Styles';
 import { IconContainer, Icon } from '../../theme/Styles';
-import * as Icons from '../Icons';
+/*import * as Icons from '../Icons';*/
 
 const Post = (props) => {
   const {
@@ -45,7 +45,7 @@ const Post = (props) => {
             <HTML html={excerpt} baseFontStyle={{ fontFamily: 'Lato-Regular' }} {...htmlStyles} />
           }
           <LikesRow>
-            <Icons.Like fill={likes ? theme.colors.primary : theme.colors.icon} />
+            
             {likes &&
               <Text style={{ marginLeft: 8, fontWeight: 'bold' }}>
                 {likes} Likes

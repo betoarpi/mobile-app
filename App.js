@@ -1,5 +1,8 @@
 import 'react-native-gesture-handler';
-import React from 'react';
+import {Asset} from 'expo-asset';
+import * as Font from 'expo-font';
+
+import React, {useState, useEffect} from 'react';
 import { Text } from 'react-native';
 
 import { ApolloProvider } from 'react-apollo';
@@ -11,11 +14,14 @@ import { AppearanceProvider } from 'react-native-appearance';
 
 import { ThemeProvider } from 'styled-components';
 import Theme from './src/theme/Theme';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+/*import Icon from 'react-native-vector-icons/MaterialCommunityIcons';*/
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
+/*import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';*/
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import {Ionicons} from '@expo/vector-icons';
+import {SplashScreen} from 'expo';
 
 import Layout from './src/containers/Layout';
 import Splash from './src/screens/Splash';
@@ -27,7 +33,9 @@ import WeeklyMenu from './src/screens/WeeklyMenu';
 import UpcomingEvents from './src/screens/UpcomingEvents';
 import Settings from './src/screens/Settings';
 
-const MenuTabs = createMaterialBottomTabNavigator();
+
+
+const MenuTabs = createBottomTabNavigator();
 
 const Stack = createStackNavigator();
 
@@ -52,7 +60,44 @@ const APP_SETTINGS = gql`
   }
 `
 
-function App() {
+export default function App(props) {
+  const [isLoadingComplete, setLoadingComplete] = useState(false);
+  useEffect(() => {
+    async function loadResourcesAndDataAsync() {
+      try {
+        SplashScreen.preventAutoHide();
+
+        // Load our initial navigation state
+        // setInitialNavigationState(await getInitialState());
+
+        // Load assets
+        await Asset.loadAsync([
+
+        ]);
+        // Load fonts
+        await Font.loadAsync({
+          //Ionicons.font,
+          'Lato-Regular': require('./src/fonts/Lato-Regular.ttf'),
+          'Lato-Black': require('./src/fonts/Lato-Black.ttf'),
+          'Lato-Bold': require('./src/fonts/Lato-Bold.ttf'),
+          'Lato-Italic': require('./src/fonts/Lato-Italic.ttf'),
+          'Lato-Light': require('./src/fonts/Lato-Light.ttf'),
+          
+          'Lato-Thin': require('./src/fonts/Lato-Thin.ttf'),
+          'Muli-Bold': require('./src/fonts/Muli-Bold.ttf'),
+        });
+      } catch (e) {
+        // We might want to provide this error information to an error reporting service
+        console.warn(e);
+      } finally {
+        setLoadingComplete(true);
+        SplashScreen.hide();
+      }
+    }
+
+    loadResourcesAndDataAsync();
+  }, []);
+
 
   return (
     <ApolloProvider client={client}>
@@ -63,7 +108,7 @@ function App() {
           } />;
           if (error) return <Text>Error! {error.message}</Text>;
 
-          //console.log(data);
+          console.log(data);
 
           const schoolTheme = {
             dark: false,
@@ -149,7 +194,7 @@ function App() {
                       options={{
                         tabBarLabel: 'Home',
                         tabBarIcon: ({ color }) => (
-                          <Icon color={color} size={24} name={'home'} />
+                          <Ionicons name={'md-home'} size={24} color={color} />
                         )
                       }}
                     />
@@ -157,7 +202,7 @@ function App() {
                       options={{
                         tabBarLabel: 'Weekly Menu',
                         tabBarIcon: ({ color }) => (
-                          <Icon color={color} size={24} name={'room-service'} />
+                          <Ionicons name={'md-pizza'} size={24} color={color} />
                         )
                       }}
                     >
@@ -168,7 +213,7 @@ function App() {
                       options={{
                         tabBarLabel: 'Events',
                         tabBarIcon: ({ color }) => (
-                          <Icon color={color} size={24} name={'calendar-today'} />
+                          <Ionicons name={'md-calendar'} size={24} color={color} />
                         )
                       }}
                     />
@@ -176,7 +221,7 @@ function App() {
                       options={{
                         tabBarLabel: 'Settings',
                         tabBarIcon: ({ color }) => (
-                          <Icon color={color} size={24} name={'dots-horizontal-circle'} />
+                          <Ionicons name={'md-more'} size={24} color={color} />
                         )
                       }}
                     >
@@ -194,4 +239,3 @@ function App() {
 
 };
 
-export default App;

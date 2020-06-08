@@ -202,7 +202,7 @@ export default function App(props) {
                       options={{
                         tabBarLabel: 'Weekly Menu',
                         tabBarIcon: ({ color }) => (
-                          <Ionicons name={'md-pizza'} size={24} color={color} />
+                          <Ionicons name={'md-restaurant'} size={24} color={color} />
                         )
                       }}
                     >

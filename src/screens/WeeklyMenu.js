@@ -19,12 +19,12 @@ const WeeklyMenu = () => {
   return (
     <>
       <FeaturedImage>
-        <MainImg source={require('../images/pizza-menu.jpg')} />
-        <WeekNavigation />
+        <MainImg source={require('../images/pizza-menu.jpg')}/>
+        <WeekNavigation/>
       </FeaturedImage >
       <PostHeader style={styles.shadow}>
         <IconContainer>
-          <Ionicons name={'md-pizza'} size={24} color={'#ffffff'} />
+          <Ionicons name={'md-restaurant'} size={24} color={'#ffffff'} />
         </IconContainer>
         <PostHeaderContainer>
           <Title>This is the menu</Title>

@@ -1,13 +1,14 @@
 import React from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, SafeAreaView } from 'react-native';
 import {Ionicons} from '@expo/vector-icons';
 import { Navigation, WeekDay, Day, Date } from './Styles';
 import Theme from '../../theme/Theme';
 
 const WeekNavigation = () => {
   return (
+    <SafeAreaView style={{flex: 1}}>
     <Navigation style={styles.shadow}>
-      <Ionicons name={'ios-arrow-dropleft'} size={24} color={Theme.colors.primary} />
+      <Ionicons name={'ios-arrow-dropleft-circle'} size={24} color={Theme.colors.primary} />
       <WeekDay>
         <Day>Mon</Day>
         <Date>13</Date>
@@ -28,8 +29,9 @@ const WeekNavigation = () => {
         <Day>Vie</Day>
         <Date>17</Date>
       </WeekDay>
-      <Ionicons name={'ios-arrow-dropright'} size={24} color={Theme.colors.primary} />
+      <Ionicons name={'ios-arrow-dropright-circle'} size={24} color={Theme.colors.primary} />
     </Navigation>
+    </SafeAreaView>
   );
 };
 const styles = StyleSheet.create({

@@ -33,6 +33,8 @@
     "android": {
       "package": "com.wonder.wonderschool",
       "versionCode": 1
-    }
+    },
+    "description": "",
+    "githubUrl": "https://github.com/Wonder-School-Platform/mobile-app"
   }
 }

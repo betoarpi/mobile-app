@@ -58,7 +58,7 @@ const Post = (props) => {
               {venue && <Location>{eventVenue.map(element => element.node.title)}</Location>}
             </Container>
             {eventCategories.edges.length > 0 &&
-              eventCategories.edges[0].node.slug === 'food' && <Ionicons name={'md-arrow-dropright'} size={24} color={theme.colors.primary} style={{ alignSelf: 'flex-start' }} />
+              eventCategories.edges[0].node.slug === 'food' && <Ionicons name={'md-return-right'} size={24} color={theme.colors.primary} style={{ alignSelf: 'flex-start' }} />
             }
           </Header>
           <Container>

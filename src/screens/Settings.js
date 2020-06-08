@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, Switch, FlatList } from 'react-native';
+import { View, Text, Switch, FlatList, SafeAreaView } from 'react-native';
 import styled from 'styled-components';
 import * as Icons from '../components/Icons';
 import SettingsItem from '../components/SettingsItem';
@@ -33,27 +33,29 @@ const Settings = () => {
   ];
   const ListSeparator = () => <Separator />
   return (
-    <SettingsLayout>
-      <TextContainer>
-        <Paragraph>
-          Please select the school levels you want to receive information from, you can adjust it later in the app settings .
-        </Paragraph>
-      </TextContainer>
-      <ListContainer>
-        <FlatList
-          data={SettingsData}
-          renderItem={({ item }) => <SettingsItem {...item}>{item.setting}</SettingsItem>}
-          ItemSeparatorComponent={ListSeparator}
-        />
-      </ListContainer>
-      <ButtonContainer>
-        <PrimaryButton
-          text='Get Started'
-        >
-          <Ionicons name={'ios-arrow-dropright'} size={24} color={Theme.colors.overPrimary} />
-        </PrimaryButton>
-      </ButtonContainer>
-    </SettingsLayout >
+    <SafeAreaView style={{flex: 1}}>
+      <SettingsLayout>
+        <TextContainer>
+          <Paragraph>
+            Please select the school levels you want to receive information from, you can adjust it later in the app settings .
+          </Paragraph>
+        </TextContainer>
+        <ListContainer>
+          <FlatList
+            data={SettingsData}
+            renderItem={({ item }) => <SettingsItem {...item}>{item.setting}</SettingsItem>}
+            ItemSeparatorComponent={ListSeparator}
+          />
+        </ListContainer>
+        <ButtonContainer>
+          <PrimaryButton
+            text='Get Started'
+          >
+            <Ionicons name={'ios-arrow-dropright'} size={24} color={Theme.colors.overPrimary} />
+          </PrimaryButton>
+        </ButtonContainer>
+      </SettingsLayout >
+    </SafeAreaView>
   );
 };
 

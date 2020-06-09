@@ -40,7 +40,7 @@ const Post = (props) => {
             </IconContainer>
           }
           <Container style={{ paddingHorizontal: 0 }}>
-            <Title onPress={handlePress}>{title}</Title>
+            <Text numberOfLines={1}><Title onPress={handlePress}>{title}</Title></Text>
             <Date>{moment(date).format('MMM DD, YYYY')}</Date>
             <Location>Location missing</Location>
           </Container>

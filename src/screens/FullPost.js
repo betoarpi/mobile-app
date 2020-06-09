@@ -4,7 +4,8 @@ import {
   StyleSheet,
   Text,
   ScrollView,
-  Image
+  Image,
+  SafeAreaView
 } from 'react-native';
 import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
@@ -63,27 +64,29 @@ const FullPost = ({ route }) => {
 
         console.log(Dimensions.get('window').width - 92);
         return (
-          <ScrollView>
-            {featuredImage && <Image source={{ uri: featuredImage.sourceUrl }} style={styles.mainImage} />}
-            <PostHeader style={styles.shadow}>
-              {categories.edges.length > 0 &&
-                <IconContainer>
-                  <Icon style={{ width: 24, height: 24 }} source={{ uri: categories.edges[0].node.categoryIcon.categoryIcon.sourceUrl }} />
-                </IconContainer>
-              }
-              <PostHeaderContainer>
-                <Title>{title}</Title>
-                <Date>{moment(date).format('MMM DD, YYYY')}</Date>
-              </PostHeaderContainer>
-            </PostHeader>
-            <Container>
-              <HTML
-                html={content}
-                baseFontStyle={{ fontFamily: 'Lato-Regular' }}
-                imagesMaxWidth={Dimensions.get('window').width - 48}
-                {...htmlStyles} />
-            </Container>
-          </ScrollView>
+          <SafeAreaView>
+            <ScrollView>
+              {featuredImage && <Image source={{ uri: featuredImage.sourceUrl }} style={styles.mainImage} />}
+              <PostHeader style={styles.shadow}>
+                {categories.edges.length > 0 &&
+                  <IconContainer>
+                    <Icon style={{ width: 24, height: 24 }} source={{ uri: categories.edges[0].node.categoryIcon.categoryIcon.sourceUrl }} />
+                  </IconContainer>
+                }
+                <PostHeaderContainer>
+                  <Title>{title}</Title>
+                  <Date>{moment(date).format('MMM DD, YYYY')}</Date>
+                </PostHeaderContainer>
+              </PostHeader>
+              <Container>
+                <HTML
+                  html={content}
+                  baseFontStyle={{ fontFamily: 'Lato-Regular' }}
+                  imagesMaxWidth={Dimensions.get('window').width - 48}
+                  {...htmlStyles} />
+              </Container>
+            </ScrollView>
+          </SafeAreaView>
         )
       }}
     </Query>
@@ -114,7 +117,8 @@ const htmlStyles = {
     p: {
       fontSize: 18,
       marginBottom: 16,
-      lineHeight: 26
+      lineHeight: 26,
+      fontFamily: 'Lato-Light',
     },
     a: {
       color: Theme.colors.primary,
@@ -135,36 +139,44 @@ const htmlStyles = {
     ul: {
       fontSize: 18,
       marginBottom: 16,
-      lineHeight: 26
+      lineHeight: 26,
+      fontFamily: 'Lato-Light',
     },
     ol: {
       fontSize: 18,
       marginBottom: 16,
-      lineHeight: 26
+      lineHeight: 26,
+      fontFamily: 'Lato-Light',
     },
     h1: {
       fontSize: 32.44,
-      marginBottom: 16
+      marginBottom: 16,
+      fontFamily: 'Muli-Bold',
     },
     h2: {
       fontSize: 28.83,
-      marginBottom: 16
+      marginBottom: 16,
+      fontFamily: 'Muli-Bold',
     },
     h3: {
       fontSize: 25.63,
-      marginBottom: 16
+      marginBottom: 16,
+      fontFamily: 'Muli-Bold',
     },
     h4: {
       fontSize: 22.78,
-      marginBottom: 16
+      marginBottom: 16,
+      fontFamily: 'Muli-Bold',
     },
     h5: {
       fontSize: 20.25,
-      marginBottom: 16
+      marginBottom: 16,
+      fontFamily: 'Muli-Bold',
     },
     h6: {
       fontSize: 18,
-      marginBottom: 16
+      marginBottom: 16,
+      fontFamily: 'Muli-Bold',
     }
   }
 };

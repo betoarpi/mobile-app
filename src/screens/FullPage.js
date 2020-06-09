@@ -4,7 +4,8 @@ import {
   StyleSheet,
   Text,
   ScrollView,
-  Image
+  Image,
+  SafeAreaView
 } from 'react-native';
 import { useQuery } from '@apollo/react-hooks';
 import gql from 'graphql-tag';
@@ -40,15 +41,17 @@ const FullPage = ({ route }) => {
   console.log(content)
 
   return (
-    <ScrollView>
-      <Container>
-        <HTML
-          html={content}
-          baseFontStyle={{ fontFamily: 'Lato-Regular' }}
-          imagesMaxWidth={Dimensions.get('window').width - 48}
-          {...htmlStyles} />
-      </Container>
-    </ScrollView>
+    <SafeAreaView>
+      <ScrollView>
+        <Container>
+          <HTML
+            html={content}
+            baseFontStyle={{ fontFamily: 'Lato-Regular' }}
+            imagesMaxWidth={Dimensions.get('window').width - 48}
+            {...htmlStyles} />
+        </Container>
+      </ScrollView>
+    </SafeAreaView>
   );
 };
 

@@ -50,7 +50,7 @@ const Post = (props) => {
               </IconContainer>
             }
             <Container style={{ paddingHorizontal: 0 }}>
-              <Title onPress={handlePress}>{title}</Title>
+              <Text numberOfLines={1}><Title onPress={handlePress}>{title}</Title></Text>
               {all_day !== 'yes' ?
                 <Date>{moment(start_date).format('MMM DD, YYYY')}</Date>
                 :

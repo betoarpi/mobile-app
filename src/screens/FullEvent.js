@@ -3,7 +3,8 @@ import {
   StyleSheet,
   Text,
   ScrollView,
-  Image
+  Image,
+  SafeAreaView
 } from 'react-native';
 import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
@@ -84,29 +85,31 @@ const FullEvent = ({ route }) => {
         console.log(eventOrganizer)
 
         return (
-          <ScrollView>
-            {featuredImage !== null && <Image source={{ uri: featuredImage.sourceUrl }} style={styles.mainImage} />}
-            <PostHeader style={styles.shadow}>
-              {!eventCategories === null &&
-                <IconContainer>
-                  <Icon style={{ width: 24, height: 24 }} source={{ uri: eventCategories.edges[0].node.categoryIcon.categoryIcon.sourceUrl }} />
-                </IconContainer>
-              }
-              <PostHeaderContainer>
-                <Title>{title}</Title>
-                {all_day !== 'yes' ?
-                  <Date>{moment(start_date).format('MMM DD, YYYY')}</Date>
-                  :
-                  <Date>All Day</Date>
+          <SafeAreaView>
+            <ScrollView>
+              {featuredImage !== null && <Image source={{ uri: featuredImage.sourceUrl }} style={styles.mainImage} />}
+              <PostHeader style={styles.shadow}>
+                {!eventCategories === null &&
+                  <IconContainer>
+                    <Icon style={{ width: 24, height: 24 }} source={{ uri: eventCategories.edges[0].node.categoryIcon.categoryIcon.sourceUrl }} />
+                  </IconContainer>
                 }
-                {venue && <Location>{eventVenue.map(element => element.node.title)}</Location>}
-                {organizer && <Location>Organized by {`${eventOrganizer.map(element => element.node.title)}`}</Location>}
-              </PostHeaderContainer>
-            </PostHeader>
-            <Container>
-              {content && <HTML html={content} baseFontStyle={{ fontFamily: 'Lato-Regular' }} {...htmlStyles} />}
-            </Container>
-          </ScrollView>
+                <PostHeaderContainer>
+                  <Title>{title}</Title>
+                  {all_day !== 'yes' ?
+                    <Date>{moment(start_date).format('MMM DD, YYYY')}</Date>
+                    :
+                    <Date>All Day</Date>
+                  }
+                  {venue && <Location>{eventVenue.map(element => element.node.title)}</Location>}
+                  {organizer && <Location>Organized by {`${eventOrganizer.map(element => element.node.title)}`}</Location>}
+                </PostHeaderContainer>
+              </PostHeader>
+              <Container>
+                {content && <HTML html={content} baseFontStyle={{ fontFamily: 'Lato-Regular' }} {...htmlStyles} />}
+              </Container>
+            </ScrollView>
+          </SafeAreaView>
         )
       }}
     </Query>

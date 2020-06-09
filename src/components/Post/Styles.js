@@ -48,15 +48,17 @@ export const Title = styled.Text`
 `
 export const Date = styled.Text`
   color: ${({ theme }) => theme.colors.icon};
-  font-size: ${({ theme }) => theme.fontSizes.titles};
+  font-size: 16px;
   flex:1 1 auto;
   flex-wrap: wrap;
+  font-family: 'Lato-Light';
 `
 export const Location = styled.Text`
   color: ${({ theme }) => theme.colors.icon};
-  font-size: ${({ theme }) => theme.fontSizes.titles};
+  font-size: 16px;
   flex:1 1 auto;
   flex-wrap: wrap;
+  font-family: 'Lato-Light';
 `
 export const LikesRow = styled.View`
   flex-direction: row;

@@ -184,13 +184,15 @@ const htmlStyles = {
     p: {
       fontSize: 18,
       marginBottom: 16,
-      lineHeight: 26
+      lineHeight: 26,
+      fontFamily: 'Lato-Light',
     },
     a: {
       color: Theme.colors.primary,
       fontSize: 18,
       marginBottom: 16,
-      lineHeight: 26
+      lineHeight: 26,
+      fontFamily: 'Lato-Light',
     },
     img: {
       borderRadius: 10,
@@ -205,36 +207,44 @@ const htmlStyles = {
     ul: {
       fontSize: 18,
       marginBottom: 16,
-      lineHeight: 26
+      lineHeight: 26,
+      fontFamily: 'Lato-Light',
     },
     ol: {
       fontSize: 18,
       marginBottom: 16,
-      lineHeight: 26
+      lineHeight: 26,
+      fontFamily: 'Lato-Light',
     },
     h1: {
       fontSize: 32.44,
-      marginBottom: 16
+      marginBottom: 16,
+      fontFamily: 'Muli-Bold',
     },
     h2: {
       fontSize: 28.83,
-      marginBottom: 16
+      marginBottom: 16,
+      fontFamily: 'Muli-Bold',
     },
     h3: {
       fontSize: 25.63,
-      marginBottom: 16
+      marginBottom: 16,
+      fontFamily: 'Muli-Bold',
     },
     h4: {
       fontSize: 22.78,
-      marginBottom: 16
+      marginBottom: 16,
+      fontFamily: 'Muli-Bold',
     },
     h5: {
       fontSize: 20.25,
-      marginBottom: 16
+      marginBottom: 16,
+      fontFamily: 'Muli-Bold',
     },
     h6: {
       fontSize: 18,
-      marginBottom: 16
+      marginBottom: 16,
+      fontFamily: 'Muli-Bold',
     }
   }
 };

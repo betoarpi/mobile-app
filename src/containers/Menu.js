@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { ScrollView, StyleSheet, Text, Dimensions } from 'react-native';
 import HTML from 'react-native-render-html';
 const Entities = require('html-entities').XmlEntities;
+import {Ionicons} from '@expo/vector-icons';
 
 import WeekNavigation from '../components/WeeklyMenu/WeekNavigation';
 import {
@@ -123,7 +124,7 @@ const TheMenu = ({ data }) => {
       </FeaturedImage >
       <PostHeader style={styles.shadow}>
         <IconContainer>
-          <Icons.Food fill='#ffffff' />
+          <Ionicons name={'md-restaurant'} size={24} color={'#ffffff'} />
         </IconContainer>
         <PostHeaderContainer>
           <Title>

@@ -44,6 +44,7 @@ export const Title = styled.Text`
   flex:1 1 auto;
   flex-wrap: wrap;
   margin-bottom:8px;
+  font-family: 'Muli-Bold';
 `
 export const Date = styled.Text`
   color: ${({ theme }) => theme.colors.icon};

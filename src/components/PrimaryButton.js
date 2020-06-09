@@ -8,8 +8,8 @@ const ButtonContainer = styled.TouchableOpacity`
   flex-direction: row;
   align-items: center;
   padding: 12px;
-  height:58px;
-  width: 352px;
+  height: 58px;
+  flex-grow: 1;
   margin:0 auto;
 `
 const ButtonText = styled.Text`

@@ -21,6 +21,10 @@ const Post = (props) => {
   } = props;
   const navigation = useNavigation();
   const handlePress = () => navigation.navigate('Full Post', { postId: postId, theme: theme });
+
+  const regex = /(<([^>]+)>)/ig;
+  var resultExce = excerpt.replace(regex, '');
+
   return (
     <CardContainer style={styles.shadow}>
       {featuredImage &&
@@ -46,8 +50,9 @@ const Post = (props) => {
         </Header>
         <Container>
           {excerpt &&
-            <HTML html={excerpt} baseFontStyle={{ fontFamily: 'Lato-Regular' }} {...htmlStyles} />
+            <Text numberOfLines={3} style={paragraph} >{resultExce}</Text>
           }
+
           <LikesRow>
             
             {likes &&
@@ -78,13 +83,12 @@ const styles = StyleSheet.create({
 });
 
 //HTML Component Styles
-const htmlStyles = {
-  tagsStyles: {
-    p: {
-      fontSize: 18,
-      marginBottom: 16,
-    }
-  }
+const paragraph = {
+  fontFamily: 'Lato-Light',
+  fontSize: 18,
+  marginBottom: 16, 
+  color: '#202020',
+  lineHeight: 24,
 }
 
 export default Post;

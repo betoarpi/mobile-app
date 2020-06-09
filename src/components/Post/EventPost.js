@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, Text } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import moment from 'moment';
 import HTML from 'react-native-render-html';
@@ -35,7 +35,8 @@ const Post = (props) => {
   const eventVenue = venuesList.edges.filter(filtered => filtered.node.eventId === parseInt(venue));
   //validate category is not "lunch-menu"
   const validCategory = eventCategories.edges.length > 0 && eventCategories.edges[0].node.slug !== 'lunch-menu';
-
+  const regex = /(<([^>]+)>)/ig;
+  var resultExce = excerpt.replace(regex, '');
 
   if (show === true && validCategory === true) {
     return (
@@ -63,7 +64,7 @@ const Post = (props) => {
           </Header>
           <Container>
             {excerpt !== "" &&
-              <HTML html={excerpt} baseFontStyle={{ fontFamily: 'Lato-Regular' }} {...htmlStyles} />
+              <Text numberOfLines={3} style={paragraph} >{resultExce}</Text>
             }
             {/* <LikesRow>
               <Icons.Like fill={likes ? theme.colors.primary : theme.colors.icon} />
@@ -99,13 +100,13 @@ const styles = StyleSheet.create({
 });
 
 //HTML Component Styles
-const htmlStyles = {
-  tagsStyles: {
-    p: {
-      fontSize: 18,
-      marginBottom: 16,
-    }
-  }
+const paragraph = {
+  fontFamily: 'Lato-Light',
+  fontSize: 18,
+  marginBottom: 16, 
+  lineHeight: 24,
+  color: '#202020',
 }
+
 
 export default Post;

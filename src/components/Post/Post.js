@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, TouchableWithoutFeedback } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import moment from 'moment';
 import HTML from 'react-native-render-html';
@@ -23,7 +23,11 @@ const Post = (props) => {
   const handlePress = () => navigation.navigate('Full Post', { postId: postId, theme: theme });
   return (
     <CardContainer style={styles.shadow}>
-      {featuredImage && <FeaturedImage source={{ uri: featuredImage.sourceUrl }} />}
+      {featuredImage &&
+        <TouchableWithoutFeedback onPress={handlePress}>
+          <FeaturedImage source={{ uri: featuredImage.sourceUrl }} />
+        </TouchableWithoutFeedback>
+      }
       <View style={{ paddingHorizontal: 21 }}>
         <Header>
           {categories.edges.length > 0 &&

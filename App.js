@@ -28,10 +28,11 @@ import Splash from './src/screens/Splash';
 import Home from './src/screens/Home';
 import FullPost from './src/screens/FullPost';
 import FullEvent from './src/screens/FullEvent';
+import FullPage from './src/screens/FullPage';
 
 import WeeklyMenu from './src/screens/WeeklyMenu';
 import UpcomingEvents from './src/screens/UpcomingEvents';
-import Settings from './src/screens/Settings';
+import More from './src/screens/More';
 
 
 
@@ -108,8 +109,6 @@ export default function App(props) {
           } />;
           if (error) return <Text>Error! {error.message}</Text>;
 
-          console.log(data);
-
           const schoolTheme = {
             dark: false,
             colors: {
@@ -180,6 +179,35 @@ export default function App(props) {
             )
           }
 
+          const SettingsStack = () => {
+            return (
+              <Stack.Navigator>
+                <Stack.Screen name='More'
+                  options={{
+                    title: 'More About our School',
+                    headerStyle: {
+                      backgroundColor: schoolTheme.colors.primary
+                    },
+                    headerTintColor: schoolTheme.colors.card,
+                  }}
+                >
+                  {props => <Layout><More {...props} theme={Theme} /></Layout>}
+                </Stack.Screen>
+                <Stack.Screen name='Full Page'
+                  options={{
+                    title: 'Back to More About the School',
+                    headerStyle: {
+                      backgroundColor: schoolTheme.colors.primary
+                    },
+                    headerTintColor: schoolTheme.colors.card,
+                  }}
+                >
+                  {props => <Layout><FullPage {...props} theme={Theme} /></Layout>}
+                </Stack.Screen>
+              </Stack.Navigator>
+            )
+          }
+
           return (
             <AppearanceProvider>
               <ThemeProvider theme={Theme}>
@@ -217,16 +245,15 @@ export default function App(props) {
                         )
                       }}
                     />
-                    <MenuTabs.Screen name="Settings"
+                    <MenuTabs.Screen name="More"
+                      component={SettingsStack}
                       options={{
-                        tabBarLabel: 'Settings',
+                        tabBarLabel: 'More',
                         tabBarIcon: ({ color }) => (
                           <Ionicons name={'md-more'} size={24} color={color} />
                         )
                       }}
-                    >
-                      {props => <Layout><Settings {...props} theme={Theme} /></Layout>}
-                    </MenuTabs.Screen>
+                    />
                   </MenuTabs.Navigator>
                 </NavigationContainer>
               </ThemeProvider>
@@ -234,7 +261,7 @@ export default function App(props) {
           );
         }}
       </Query>
-    </ApolloProvider>
+    </ApolloProvider >
   );
 
 };

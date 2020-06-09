@@ -40,11 +40,11 @@ const PostList = (props) => {
     <PostListContainer>
       <List
         data={data.edges}
-        keyExtractor={(item, index) => {
+        keyExtractor={(item) => {
           if (item.node.databaseId) {
             return item.node.databaseId.toString()
           } else {
-            return index.toString();
+            return item.node.id;
           }
         }}
         ListEmptyComponent={() => <PostListSkeleton />}
@@ -59,7 +59,7 @@ const PostList = (props) => {
                 theme={theme}
                 venuesList={venuesList}
                 organizersList={organizersList}
-                show={true}
+                show={item.node.start_date !== null ? true : false}
                 {...item.node}
               />
               break;

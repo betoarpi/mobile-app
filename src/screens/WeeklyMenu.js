@@ -1,22 +1,53 @@
 import React from 'react';
+
 import { View, FlatList, StyleSheet } from 'react-native';
 import WeekNavigation from '../components/WeeklyMenu/WeekNavigation';
 import { FeaturedImage, MainImg, IconContainer, PostHeader, PostHeaderContainer, PostDetails, Title, Paragraph, Note, LikesRow, LikesText } from '../theme/Styles';
 import {Ionicons} from '@expo/vector-icons';
 import Theme from '../theme/Theme';
 
+import TheMenu from '../containers/Menu';
+import { Query } from 'react-apollo';
+import gql from 'graphql-tag';
+import PostSkeleton from '../components/Post/PostSkeleton';
+import DataError from '../components/DataError';
+
+const WEEKLY_MENU_POSTS_QUERY = gql`
+  query WEEKLY_MENU_POSTS_QUERY {
+    tags(where: {name: ["lunch", "breakfast"]}, last: 10) {
+      edges {
+        node {
+          slug
+          events {
+            edges {
+              node {
+                databaseId
+                title
+                content
+                start_date
+                tags {
+                  edges {
+                    node {
+                      slug
+                      name
+                    }
+                  }
+                }
+                featuredImage {
+                  sourceUrl(size: MEDIUM)
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+`
+
 const WeeklyMenu = () => {
-  const Notes = [
-    {
-      note: 'All menus are subject to change.',
-      id: '1'
-    },
-    {
-      note: 'No artificial flavors, colors, or sweeteners are used in any school meal.',
-      id: '2'
-    },
-  ];
   return (
+
     <>
       <FeaturedImage>
         <MainImg source={require('../images/pizza-menu.jpg')}/>
@@ -49,25 +80,20 @@ const WeeklyMenu = () => {
           </LikesText>
         </LikesRow>
       </View>
+    
+
+    <Query query={WEEKLY_MENU_POSTS_QUERY}>
+      {({ loading, error, data }) => {
+        if (loading) return <PostSkeleton />;
+        if (error) return <DataError />;
+        if (!data.tags.edges.length) return <Text>There are no posts.</Text>;
+        return (
+          <TheMenu data={data} />
+        );
+      }}
+    </Query>
     </>
   );
 };
-
-const styles = StyleSheet.create({
-  paddingH: {
-    paddingHorizontal: 24
-  },
-  shadow: {
-    shadowColor: 'rgb(138, 138, 138)',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.21,
-    shadowRadius: 4,
-
-    elevation: 4,
-  }
-})
 
 export default WeeklyMenu;

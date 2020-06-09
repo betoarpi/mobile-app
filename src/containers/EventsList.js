@@ -23,6 +23,19 @@ const PostList = (props) => {
               __typename: previousResult.events.__typename,
               edges: [...previousResult.events.edges, ...newEdges],
               pageInfo
+            },
+            events: {
+              __typename: previousResult.events.__typename,
+              edges: [...previousResult.events.edges],
+              pageInfo
+            },
+            eventVenues: {
+              __typename: previousResult.eventVenues.__typename,
+              edges: [...previousResult.eventVenues.edges]
+            },
+            eventOrganizers: {
+              __typename: previousResult.eventOrganizers.__typename,
+              edges: [...previousResult.eventOrganizers.edges]
             }
           } : previousResult;
       }

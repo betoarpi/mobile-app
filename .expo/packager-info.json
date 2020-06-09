@@ -2,9 +2,9 @@
   "devToolsPort": 19002,
   "expoServerPort": 19000,
   "packagerPort": 19001,
-  "packagerPid": 3617,
-  "expoServerNgrokUrl": "https://ey-wtd.anonymous.mobile-app.exp.direct",
-  "packagerNgrokUrl": "https://packager.ey-wtd.anonymous.mobile-app.exp.direct",
-  "ngrokPid": 14935,
+  "packagerPid": 2500,
+  "expoServerNgrokUrl": "https://ey-wtd.jessica-wonder.mobile-app.exp.direct",
+  "packagerNgrokUrl": "https://packager.ey-wtd.jessica-wonder.mobile-app.exp.direct",
+  "ngrokPid": 2788,
   "webpackServerPort": null
 }

@@ -21,9 +21,9 @@ const ButtonText = styled.Text`
 `
 
 const PrimaryButton = props => {
-  const { text, children } = props;
+  const { text, children, onPress } = props;
   return (
-    <ButtonContainer onPress={() => alert('Hi!')}>
+    <ButtonContainer onPress={onPress}>
       <ButtonText>{text}</ButtonText>
       {children}
     </ButtonContainer>

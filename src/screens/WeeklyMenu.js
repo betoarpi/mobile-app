@@ -14,6 +14,7 @@ const WEEKLY_MENU_POSTS_QUERY = gql`
           events {
             edges {
               node {
+                databaseId
                 title
                 content
                 start_date

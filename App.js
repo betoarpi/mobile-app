@@ -22,10 +22,11 @@ import Splash from './src/screens/Splash';
 import Home from './src/screens/Home';
 import FullPost from './src/screens/FullPost';
 import FullEvent from './src/screens/FullEvent';
+import FullPage from './src/screens/FullPage';
 
 import WeeklyMenu from './src/screens/WeeklyMenu';
 import UpcomingEvents from './src/screens/UpcomingEvents';
-import Settings from './src/screens/Settings';
+import More from './src/screens/More';
 
 const MenuTabs = createMaterialBottomTabNavigator();
 
@@ -62,8 +63,6 @@ function App() {
             data ? data.appSettings.school_settings.schoolLogo.sourceUrl : 'Loading...'
           } />;
           if (error) return <Text>Error! {error.message}</Text>;
-
-          //console.log(data);
 
           const schoolTheme = {
             dark: false,
@@ -135,6 +134,35 @@ function App() {
             )
           }
 
+          const SettingsStack = () => {
+            return (
+              <Stack.Navigator>
+                <Stack.Screen name='More'
+                  options={{
+                    title: 'More About our School',
+                    headerStyle: {
+                      backgroundColor: schoolTheme.colors.primary
+                    },
+                    headerTintColor: schoolTheme.colors.card,
+                  }}
+                >
+                  {props => <Layout><More {...props} theme={Theme} /></Layout>}
+                </Stack.Screen>
+                <Stack.Screen name='Full Page'
+                  options={{
+                    title: 'Back to More About the School',
+                    headerStyle: {
+                      backgroundColor: schoolTheme.colors.primary
+                    },
+                    headerTintColor: schoolTheme.colors.card,
+                  }}
+                >
+                  {props => <Layout><FullPage {...props} theme={Theme} /></Layout>}
+                </Stack.Screen>
+              </Stack.Navigator>
+            )
+          }
+
           return (
             <AppearanceProvider>
               <ThemeProvider theme={Theme}>
@@ -172,16 +200,15 @@ function App() {
                         )
                       }}
                     />
-                    <MenuTabs.Screen name="Settings"
+                    <MenuTabs.Screen name="More"
+                      component={SettingsStack}
                       options={{
-                        tabBarLabel: 'Settings',
+                        tabBarLabel: 'More',
                         tabBarIcon: ({ color }) => (
                           <Icon color={color} size={24} name={'dots-horizontal-circle'} />
                         )
                       }}
-                    >
-                      {props => <Layout><Settings {...props} theme={Theme} /></Layout>}
-                    </MenuTabs.Screen>
+                    />
                   </MenuTabs.Navigator>
                 </NavigationContainer>
               </ThemeProvider>
@@ -189,7 +216,7 @@ function App() {
           );
         }}
       </Query>
-    </ApolloProvider>
+    </ApolloProvider >
   );
 
 };

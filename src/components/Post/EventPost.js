@@ -32,9 +32,8 @@ const Post = (props) => {
   });
 
   const eventVenue = venuesList.edges.filter(filtered => filtered.node.eventId === parseInt(venue));
-
   //validate category is not "lunch-menu"
-  const validCategory = eventCategories.edges[0].node.slug !== 'lunch-menu';
+  const validCategory = eventCategories.edges.length > 0 && eventCategories.edges[0].node.slug !== 'lunch-menu';
 
   if (show === true && validCategory === true) {
     return (
@@ -56,7 +55,7 @@ const Post = (props) => {
               }
               {venue && <Location>{eventVenue.map(element => element.node.title)}</Location>}
             </Container>
-            {eventCategories.edges.length > 0 &&
+            {!eventCategories === null &&
               eventCategories.edges[0].node.slug === 'food' && <Icons.ArrowRight style={{ alignSelf: 'flex-start' }} fill={theme.colors.primary} />
             }
           </Header>

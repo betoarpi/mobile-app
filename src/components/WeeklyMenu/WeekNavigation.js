@@ -5,25 +5,24 @@ import * as Icons from '../Icons';
 import { Navigation, WeekDay, Day, Date } from './Styles';
 import Theme from '../../theme/Theme';
 
-const WeekNavigation = ({ weekDates, calendarDate, handleDateToShow }) => {
+const WeekNavigation = ({ weekDates, calendarDate, handleDateToShow, handleIsWeek }) => {
 
   const week = Object.entries(weekDates).map((key) => {
     const day = key[0];
     const date = key[1];
-    const isActive = calendarDate === key[1];
 
     return (
       <TouchableWithoutFeedback
         key={key[0]}
         dataDay={key[0]}
         onPress={() => {
-          handleDateToShow(key[0])
+          handleDateToShow(key[0], key[1])
         }}
         style={{ borderWidth: 1, borderColor: 'red' }}
       >
-        <WeekDay active={isActive}>
+        <WeekDay active={calendarDate}>
           <Day>{day}</Day>
-          <Date active={isActive}>{date}</Date>
+          <Date active={calendarDate}>{date}</Date>
         </WeekDay>
       </TouchableWithoutFeedback>
     )
@@ -31,9 +30,17 @@ const WeekNavigation = ({ weekDates, calendarDate, handleDateToShow }) => {
 
   return (
     <Navigation style={styles.shadow}>
-      <Icons.ArrowLeft fill={Theme.colors.primary} />
+      <TouchableWithoutFeedback
+        onPress={() => handleIsWeek('left')}
+      >
+        <Icons.ArrowLeft fill={Theme.colors.primary} />
+      </TouchableWithoutFeedback>
       {week}
-      <Icons.ArrowRight fill={Theme.colors.primary} />
+      <TouchableWithoutFeedback
+        onPress={() => handleIsWeek('right')}
+      >
+        <Icons.ArrowRight fill={Theme.colors.primary} />
+      </TouchableWithoutFeedback>
     </Navigation>
   );
 };

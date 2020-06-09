@@ -1,6 +1,7 @@
-import React, { useEffect, useState, useCallback } from 'react';
-import { ScrollView, StyleSheet, Text, TouchableWithoutFeedback } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { ScrollView, StyleSheet, Text, Dimensions } from 'react-native';
 import HTML from 'react-native-render-html';
+const Entities = require('html-entities').XmlEntities;
 
 import WeekNavigation from '../components/WeeklyMenu/WeekNavigation';
 import {
@@ -13,70 +14,111 @@ import {
   Container
 } from '../theme/Styles';
 import { Date } from '../components/Post/Styles';
+import PrimaryButton from '../components/PrimaryButton';
 import * as Icons from '../components/Icons';
 import Theme from '../theme/Theme';
 import moment from 'moment';
 
-const TheMenu = ({ data }) => {
-  const tagEvents = data.tags.edges;
-  const currentDate = moment().format('MM DD, YYYY')
-  let calendarDate = moment().format('DD');
-  const currentTime = moment().format('HH');
-  const [dayTime, setDayTime] = useState(currentTime > 14 ? 'afternoon' : 'morning');
+const entities = new Entities();
 
-  const menuArray = [];
-  (function mapping() {
+const TheMenu = ({ data }) => {
+  const handleWeekDay = () => {
+    if (moment().isoWeekday() <= 5) {
+      return moment().format('ddd');
+    } else {
+      return moment(moment().day('Friday')._d).format('ddd');
+    }
+  }
+  const today = handleWeekDay();
+  const tagEvents = data.tags.edges;
+  const [isMeal, setIsMeal] = useState(moment().format('hh') < 12 ? 'Breakfast' : 'Lunch');
+  const [dayToShow, setDayToShow] = useState(today);
+  const [isWeek, setIsWeek] = useState(0);
+
+  //All Menus
+  let listAllMenus = []
+  function createList() {
     tagEvents.map(item => {
       item.node.events.edges.map(i => {
-        menuArray.push(i.node)
+        if (listAllMenus.length <= 0) {
+          listAllMenus.push(i.node)
+        } else {
+          let exist = false;
+          listAllMenus.forEach(element => {
+            if (element.databaseId === i.node.databaseId) {
+              exist = true;
+            }
+          });
+          if (exist === false) {
+            listAllMenus.push(i.node)
+          }
+        }
       })
     })
-  })();
+  };
+  createList();
 
-  const activeMenus = [];
-  function currentMenu(date) {
-    menuArray.filter(filtered => {
-      const filteredDate = moment(filtered.start_date).format('MM DD, YYYY');
-      if (filteredDate === date) {
-        activeMenus.push(filtered)
+  const [activeDate, setActiveDate] = useState(moment().format('DD'));
+  const weekDates = {
+    Mon: moment(moment().day('Monday').add(isWeek, 'weeks')._d).format('DD'),
+    Tue: moment(moment().day('Tuesday').add(isWeek, 'weeks')._d).format('DD'),
+    Wed: moment(moment().day('Wednesday').add(isWeek, 'weeks')._d).format('DD'),
+    Thu: moment(moment().day('Thursday').add(isWeek, 'weeks')._d).format('DD'),
+    Fri: moment(moment().day('Friday').add(isWeek, 'weeks')._d).format('DD'),
+  };
+
+  //Define the Menu to show
+  let Menu = [];
+  let BreakfastMenu = [];
+  let LunchMenu = [];
+  function MenuToShow(showThis, meal) {
+    listAllMenus.filter(filtered => {
+      if (moment(filtered.start_date).format('ddd') === showThis) {
+        Menu.push(filtered)
       }
     })
-  };
-  currentMenu('06 02, 2020');
+    Menu.filter(filtered => {
+      if (filtered.tags.edges[0].node.name === 'Breakfast') {
+        BreakfastMenu = [];
+        BreakfastMenu.push(filtered);
+      } else {
+        LunchMenu = [];
+        LunchMenu.push(filtered);
+      }
+    })
+  }
+  MenuToShow(dayToShow, isMeal);
 
-  let menuToShow;
-  (function filterMenu() {
-    if (dayTime === 'afternoon') {
-      menuToShow = activeMenus.filter(filtered => filtered.tags.edges[0].node.slug === 'lunch');
-    } else {
-      menuToShow = activeMenus.filter(filtered => filtered.tags.edges[0].node.slug === 'breakfast');
-    }
-  })();
-
-  const weekDates = {
-    Mon: moment(moment().day('Monday')._d).format('DD'),
-    Tue: moment(moment().day('Tuesday')._d).format('DD'),
-    Wed: moment(moment().day('Wednesday')._d).format('DD'),
-    Thue: moment(moment().day('Thursday')._d).format('DD'),
-    Fri: moment(moment().day('Friday')._d).format('DD'),
-  };
-
-  const handleDateToShow = (() => {
-    //something
+  const handleDateToShow = ((dayName, dayNumber) => {
+    setDayToShow(dayName);
+    setActiveDate(dayNumber);
   })
+
+  const handleMeal = () => {
+    setIsMeal(isMeal === 'Breakfast' ? 'Lunch' : 'Breakfast');
+  }
+
+  const handleIsWeek = (direction) => {
+    if (direction === 'left') {
+      setIsWeek(isWeek - 1);
+    } else {
+      setIsWeek(isWeek + 1);
+    }
+  }
 
   return (
     <ScrollView style={styles.wrapper}>
       <FeaturedImage style={{ height: 300 }}>
-        <MainImg source={
-          require('../images/pizza-menu.jpg')
+        {isMeal === 'Breakfast' ?
+          BreakfastMenu[0].featuredImage && <MainImg source={{ uri: BreakfastMenu[0].featuredImage.sourceUrl }} />
+          :
+          LunchMenu[0].featuredImage && <MainImg source={{ uri: LunchMenu[0].featuredImage.sourceUrl }} />
         }
-          style={{ height: 320 }}
-        />
         <WeekNavigation
           weekDates={weekDates}
-          calendarDate={calendarDate}
+          calendarDate={activeDate}
           handleDateToShow={handleDateToShow}
+          handleIsWeek={handleIsWeek}
         />
       </FeaturedImage >
       <PostHeader style={styles.shadow}>
@@ -84,12 +126,32 @@ const TheMenu = ({ data }) => {
           <Icons.Food fill='#ffffff' />
         </IconContainer>
         <PostHeaderContainer>
-          <Title>{menuToShow[0].title}</Title>
-          <Date>{`${menuToShow[0].tags.edges[0].node.name} Menu for ${moment(menuToShow[0].start_date).format('MMM DD')}`}</Date>
+          <Title>
+            {isMeal === 'Breakfast' ?
+              entities.decode(BreakfastMenu[0].title)
+              :
+              entities.decode(LunchMenu[0].title)
+            }
+          </Title>
+          <Date>{`${isMeal} for ${dayToShow}`}</Date>
         </PostHeaderContainer>
       </PostHeader>
       <Container>
-        <HTML html={menuToShow[0].content} baseFontStyle={{ fontFamily: 'Lato-Regular' }} {...htmlStyles} />
+        <HTML
+          html={
+            isMeal === 'Breakfast' ?
+              BreakfastMenu[0].content
+              :
+              LunchMenu[0].content
+          }
+          imagesMaxWidth={Dimensions.get('window').width - 48}
+          baseFontStyle={{ fontFamily: 'Lato-Regular' }}
+          {...htmlStyles}
+        />
+        <PrimaryButton
+          onPress={handleMeal}
+          text={isMeal === 'Breakfast' ? "See Lunch Menu" : "See Breakfast Menu"}
+        />
       </Container>
     </ScrollView>
   );

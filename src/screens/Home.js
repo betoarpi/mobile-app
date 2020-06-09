@@ -9,9 +9,10 @@ import DataError from '../components/DataError';
 
 const ALL_POSTS_QUERY = gql`
   query ALL_POSTS_QUERY($cursor: String) {
-    contentNodes(first: 12, where: {status: PUBLISH}, after: $cursor) {
+    contentNodes(first: 64, where: {status: PUBLISH}, after: $cursor) {
       edges {
         node {
+            id
           __typename
           ... on Post {
             databaseId
@@ -45,6 +46,7 @@ const ALL_POSTS_QUERY = gql`
           ... on Event {
             eventId
             databaseId
+            id
             title
             start_date
             end_date

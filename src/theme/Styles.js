@@ -51,11 +51,11 @@ export const IconContainer = styled.View`
   align-self: flex-start;
   align-items: center;
   background: ${({ theme }) => theme.colors.primary};
-  border-radius:24px;
+  border-radius:50px;
   justify-content: center;
-  height:48px;
+  height:${props => props.height || "48px"};
   margin-right:12px;
-  width:48px;
+  width: ${props => props.width || "48px"};
 `
 export const Icon = styled.Image`
   height: 24px;
@@ -63,7 +63,7 @@ export const Icon = styled.Image`
 `
 export const FeaturedImage = styled.View`
   background: ${({ theme }) => theme.colors.primaryLighten};
-  flex:0 0 320px;
+  flex: ${props => props.flexHeight || "0 0 120px"};
   width: 100%;
 `
 export const MainImg = styled.Image`
@@ -79,7 +79,7 @@ export const PostHeader = styled.View`
   border-radius:10px;
   flex-direction: row;
   justify-content: space-between;
-  margin: 24px;
+  margin: 24px 24px 0 24px;
   padding:8px;
   padding:16px;
   margin-top: -16px;

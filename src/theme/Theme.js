@@ -11,7 +11,6 @@ export default {
   },
   fontSizes: {
     schoolName: '22px',
-    titles: '18px',
     regular: '18px'
-  }
+  },
 }

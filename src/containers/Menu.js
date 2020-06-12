@@ -20,6 +20,9 @@ import * as Icons from '../components/Icons';
 import Theme from '../theme/Theme';
 import moment from 'moment';
 
+import ScalableText from 'react-native-text';
+import { scaleText } from 'react-native-text';
+
 const entities = new Entities();
 
 const TheMenu = ({ data }) => {
@@ -107,9 +110,13 @@ const TheMenu = ({ data }) => {
     }
   }
 
+  const imageHeight = Dimensions.get('window').height / 2.8;
+  const iconWidth = Dimensions.get('window').width / 8;
+  const iconWidthPx = iconWidth + 'px';
+
   return (
     <ScrollView style={styles.wrapper}>
-      <FeaturedImage style={{ height: 300 }}>
+      <FeaturedImage style={{ height: imageHeight }}>
         {isMeal === 'Breakfast' ?
           BreakfastMenu[0].featuredImage && <MainImg source={{ uri: BreakfastMenu[0].featuredImage.sourceUrl }} />
           :
@@ -123,18 +130,24 @@ const TheMenu = ({ data }) => {
         />
       </FeaturedImage >
       <PostHeader style={styles.shadow}>
-        <IconContainer>
+        <IconContainer height={iconWidthPx} width={iconWidthPx}>
           <Ionicons name={'md-restaurant'} size={24} color={'#ffffff'} />
         </IconContainer>
         <PostHeaderContainer>
           <Title>
-            {isMeal === 'Breakfast' ?
-              entities.decode(BreakfastMenu[0].title)
-              :
-              entities.decode(LunchMenu[0].title)
-            }
+            <ScalableText style={styles.title}>
+              {isMeal === 'Breakfast' ?
+                entities.decode(BreakfastMenu[0].title)
+                :
+                entities.decode(LunchMenu[0].title)
+              }
+            </ScalableText>
           </Title>
-          <Date>{`${isMeal} for ${dayToShow}`}</Date>
+          <Date>
+            <ScalableText style={styles.date}>
+              {`${isMeal} for ${dayToShow}`}
+            </ScalableText>
+          </Date>
         </PostHeaderContainer>
       </PostHeader>
       <Container>
@@ -175,6 +188,12 @@ const styles = StyleSheet.create({
   },
   wrapper: {
     flex: 1,
+  },
+  title: {
+    fontSize: 18,
+  },
+  date: {
+    fontSize: 16,
   }
 });
 
@@ -217,27 +236,27 @@ const htmlStyles = {
       fontFamily: 'Lato-Light',
     },
     h1: {
-      fontSize: 32.44,
+      fontSize: 25,
       marginBottom: 16,
       fontFamily: 'Muli-Bold',
     },
     h2: {
-      fontSize: 28.83,
+      fontSize: 24,
       marginBottom: 16,
       fontFamily: 'Muli-Bold',
     },
     h3: {
-      fontSize: 25.63,
+      fontSize: 22,
       marginBottom: 16,
       fontFamily: 'Muli-Bold',
     },
     h4: {
-      fontSize: 22.78,
+      fontSize: 20,
       marginBottom: 16,
       fontFamily: 'Muli-Bold',
     },
     h5: {
-      fontSize: 20.25,
+      fontSize: 18,
       marginBottom: 16,
       fontFamily: 'Muli-Bold',
     },

@@ -1,10 +1,13 @@
 import React from 'react';
-import { StyleSheet, TouchableWithoutFeedback, SafeAreaView } from 'react-native';
+import { StyleSheet, TouchableWithoutFeedback, SafeAreaView, Dimensions } from 'react-native';
 import moment from 'moment';
-import * as Icons from '../Icons';
 import { Navigation, WeekDay, Day, Date } from './Styles';
 import Theme from '../../theme/Theme';
-import {Ionicons} from '@expo/vector-icons';
+import { Entypo } from '@expo/vector-icons'; 
+import ScalableText from 'react-native-text';
+
+const WeekDayWidth = (Dimensions.get('window').width / 7) - 10;
+const WeekDayWidthPx = WeekDayWidth + 'px';
 
 const WeekNavigation = ({ weekDates, calendarDate, handleDateToShow, handleIsWeek }) => {
 
@@ -19,11 +22,12 @@ const WeekNavigation = ({ weekDates, calendarDate, handleDateToShow, handleIsWee
         onPress={() => {
           handleDateToShow(key[0], key[1])
         }}
-        style={{ borderWidth: 1, borderColor: 'red' }}
+        style={{ borderWidth: 1, background: 'red' }}
       >
-        <WeekDay active={calendarDate}>
-          <Day>{day}</Day>
-          <Date active={calendarDate}>{date}</Date>
+        <WeekDay active={calendarDate} width={WeekDayWidthPx} height={WeekDayWidthPx}>
+          <ScalableText styles={styles.day}>{day}</ScalableText>
+          <Date active={calendarDate}><ScalableText style={styles.date}>{date}</ScalableText></Date>
+          
         </WeekDay>
       </TouchableWithoutFeedback>
     )
@@ -31,19 +35,19 @@ const WeekNavigation = ({ weekDates, calendarDate, handleDateToShow, handleIsWee
 
   return (
     <SafeAreaView style={{flex: 1}}>
-    <Navigation style={styles.shadow}>
-      <TouchableWithoutFeedback
-        onPress={() => handleIsWeek('left')}
-      >
-        <Ionicons name={'ios-arrow-dropleft-circle'} size={24} color={Theme.colors.primary} />
-      </TouchableWithoutFeedback>
-      {week}
-      <TouchableWithoutFeedback
-        onPress={() => handleIsWeek('right')}
-      >
-        <Ionicons name={'ios-arrow-dropright-circle'} size={24} color={Theme.colors.primary} />
-      </TouchableWithoutFeedback>
-    </Navigation>
+      <Navigation style={styles.shadow}>
+        <TouchableWithoutFeedback
+          onPress={() => handleIsWeek('left')}
+        >
+        <Entypo name="chevron-small-left" size={24} color={Theme.colors.primary} />
+        </TouchableWithoutFeedback>
+        {week}
+        <TouchableWithoutFeedback
+          onPress={() => handleIsWeek('right')}
+        >
+        <Entypo name="chevron-small-right" size={24} color={Theme.colors.primary} />
+        </TouchableWithoutFeedback>
+      </Navigation>
     </SafeAreaView>
   );
 };
@@ -58,6 +62,13 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
 
     elevation: 4,
+  }, 
+  day: {
+    fontSize: 12,
+  },
+  date: {
+    fontSize: 14,
   }
 })
+
 export default WeekNavigation;

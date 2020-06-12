@@ -11,7 +11,7 @@ import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
 import moment from 'moment';
 import HTML from 'react-native-render-html';
-
+import ScalableText from 'react-native-text';
 import { Icon, IconContainer, PostHeader, PostHeaderContainer, Title, Container } from '../theme/Styles';
 import { Date } from '../components/Post/Styles';
 import Theme from '../theme/Theme';
@@ -61,8 +61,6 @@ const FullPost = ({ route }) => {
           title,
           content,
         } = data.postBy;
-
-        console.log(Dimensions.get('window').width - 92);
         return (
           <SafeAreaView>
             <ScrollView>

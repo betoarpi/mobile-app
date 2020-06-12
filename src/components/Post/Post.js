@@ -3,7 +3,8 @@ import { View, Text, StyleSheet, TouchableWithoutFeedback } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import moment from 'moment';
 import HTML from 'react-native-render-html';
-
+import ScalableText from 'react-native-text';
+import { scaleText } from 'react-native-text';
 import { CardContainer, FeaturedImage, Header, Container, Title, Date, Location, LikesRow } from './Styles';
 import { IconContainer, Icon } from '../../theme/Styles';
 /*import * as Icons from '../Icons';*/
@@ -40,9 +41,21 @@ const Post = (props) => {
             </IconContainer>
           }
           <Container style={{ paddingHorizontal: 0 }}>
-            <Text numberOfLines={1}><Title onPress={handlePress}>{title}</Title></Text>
-            <Date>{moment(date).format('MMM DD, YYYY')}</Date>
-            <Location>Location missing</Location>
+            <Title numberOfLines={1} onPress={handlePress}>
+              <ScalableText style={styleTitle}>
+                {title}
+              </ScalableText>
+            </Title>
+            <Date>
+              <ScalableText style={styleTitle}>
+                {moment(date).format('MMM DD, YYYY')}
+              </ScalableText>
+            </Date>
+            <Location>
+              <ScalableText style={styleTitle}>
+                Location missing
+              </ScalableText>
+            </Location>
           </Container>
           {categories.edges.length > 0 &&
             categories.edges[0].node.slug === 'food' && <Icons.ArrowRight style={{ alignSelf: 'flex-start' }} fill={theme.colors.primary} />
@@ -50,15 +63,15 @@ const Post = (props) => {
         </Header>
         <Container>
           {excerpt &&
-            <Text numberOfLines={3} style={paragraph} >{resultExce}</Text>
+            <ScalableText numberOfLines={2} style={paragraph} >{resultExce}</ScalableText>
           }
 
           <LikesRow>
             
             {likes &&
-              <Text style={{ marginLeft: 8, fontWeight: 'bold' }}>
+              <ScalableText style={{ marginLeft: 8, fontWeight: 'bold' }}>
                 {likes} Likes
-              </Text>
+              </ScalableText>
             }
           </LikesRow>
         </Container>
@@ -85,10 +98,21 @@ const styles = StyleSheet.create({
 //HTML Component Styles
 const paragraph = {
   fontFamily: 'Lato-Light',
-  fontSize: 18,
-  marginBottom: 16, 
+  fontSize: 17,
+  marginBottom: 0, 
   color: '#202020',
   lineHeight: 24,
 }
+
+const styleTitle = scaleText({
+  fontSize: 18,
+  lineHeight: 18 * 1.2,
+});
+
+const styleDate = scaleText({
+  fontSize: 16,
+  lineHeight: 16 * 1.1,
+});
+  
 
 export default Post;

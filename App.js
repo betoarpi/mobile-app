@@ -20,7 +20,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 /*import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';*/
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import {Ionicons} from '@expo/vector-icons';
+import { Ionicons, Feather} from '@expo/vector-icons';
 import {SplashScreen} from 'expo';
 
 import Layout from './src/containers/Layout';
@@ -247,11 +247,11 @@ export default function App(props) {
                     />
                     <MenuTabs.Screen name="More"
                       component={SettingsStack}
+                      style={{borderRadius: 30}}
                       options={{
                         tabBarLabel: 'More',
                         tabBarIcon: ({ color }) => (
-                          <Ionicons name={'md-more'} size={24} color={color} />
-                        )
+                          <Feather name="more-horizontal" size={22} color={color} />                        )
                       }}
                     />
                   </MenuTabs.Navigator>

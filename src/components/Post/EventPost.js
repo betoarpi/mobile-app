@@ -1,5 +1,7 @@
 import React from 'react';
-import { View, StyleSheet, Text } from 'react-native';
+import { View, StyleSheet, Text, Dimensions } from 'react-native';
+import ScalableText from 'react-native-text';
+import { scaleText } from 'react-native-text';
 import { useNavigation } from '@react-navigation/native';
 import moment from 'moment';
 import HTML from 'react-native-render-html';
@@ -8,6 +10,9 @@ import { CardContainer, FeaturedImage, Header, Container, Title, Date, Location,
 import { IconContainer, Icon } from '../../theme/Styles';
 import * as Icons from '../Icons';
 import {Ionicons} from '@expo/vector-icons';
+
+const heightFeature = Dimensions.get('window').width * 0.5;
+const heightFeaturePx = heightFeature + 'px';
 
 const Post = (props) => {
   const {
@@ -23,7 +28,8 @@ const Post = (props) => {
     venuesList,
     organizersList,
     selectedDate,
-    show
+    show,
+    theme
   } = props;
   const navigation = useNavigation();
   const handlePress = () => navigation.navigate('Full Event', {
@@ -41,20 +47,32 @@ const Post = (props) => {
   if (show === true && validCategory === true) {
     return (
       <CardContainer style={styles.shadow}>
-        {featuredImage && <FeaturedImage source={{ uri: featuredImage.sourceUrl }} />}
+        {featuredImage && <FeaturedImage source={{ uri: featuredImage.sourceUrl }} Hheight={heightFeaturePx} />}
         <View style={{ paddingHorizontal: 21 }}>
           <Header>
             {!eventCategories === null &&
               <IconContainer>
-                <Icon style={{ width: 24, height: 24 }} source={{ uri: eventCategories.edges[0].node.categoryIcon.categoryIcon.sourceUrl }} />
+                <Icon style={styleIcon} source={{ uri: eventCategories.edges[0].node.categoryIcon.categoryIcon.sourceUrl }} />
               </IconContainer>
             }
             <Container style={{ paddingHorizontal: 0 }}>
-              <Text numberOfLines={1}><Title onPress={handlePress}>{title}</Title></Text>
+              <Title numberOfLines={1} onPress={handlePress}>
+                <ScalableText style={styleTitle}>
+                  {title}
+                </ScalableText>
+              </Title>
               {all_day !== 'yes' ?
-                <Date>{moment(start_date).format('MMM DD, YYYY')}</Date>
+                <Date>
+                  <ScalableText style={styleDate}>
+                    {moment(start_date).format('MMM DD, YYYY')}
+                  </ScalableText>  
+                </Date>
                 :
-                <Date>All Day</Date>
+                <Date>
+                  <ScalableText style={styleDate}>
+                    All Day
+                  </ScalableText>  
+                </Date>
               }
               {venue && <Location>{eventVenue.map(element => element.node.title)}</Location>}
             </Container>
@@ -64,7 +82,7 @@ const Post = (props) => {
           </Header>
           <Container>
             {excerpt !== "" &&
-              <Text numberOfLines={3} style={paragraph} >{resultExce}</Text>
+              <ScalableText numberOfLines={2} style={paragraph} >{resultExce}</ScalableText>
             }
             {/* <LikesRow>
               <Icons.Like fill={likes ? theme.colors.primary : theme.colors.icon} />
@@ -102,11 +120,29 @@ const styles = StyleSheet.create({
 //HTML Component Styles
 const paragraph = {
   fontFamily: 'Lato-Light',
-  fontSize: 18,
-  marginBottom: 16, 
-  lineHeight: 24,
+  fontSize: 17,
+  marginBottom: 10, 
+  lineHeight: 18 * 1.2,
   color: '#202020',
 }
+
+const styleTitle = scaleText({
+  fontSize: 18,
+  lineHeight: 18 * 1.2,
+  fontWeight: 600,
+});
+
+const styleDate = scaleText({
+  fontSize: 16,
+  lineHeight: 16 * 1.2,
+});
+
+const styleIcon = {
+  width: Dimensions.get('window').width * 0.4,
+  height: Dimensions.get('window').width * 0.4,
+};
+
+
 
 
 export default Post;

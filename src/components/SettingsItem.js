@@ -3,8 +3,8 @@ import { TouchableWithoutFeedback } from 'react-native';
 import { Switch } from 'react-native';
 import styled from 'styled-components';
 import { Paragraph } from '../theme/Styles';
-import * as Icons from '../components/Icons';
-import {Ionicons} from '@expo/vector-icons';
+import ScalableText from 'react-native-text';
+import { Entypo } from '@expo/vector-icons';
 import Theme from '../theme/Theme';
 
 const SettingsItem = (props) => {
@@ -21,9 +21,9 @@ const SettingsItem = (props) => {
           }
       }>
       <ListItem>
-        <ListText>
+        <ScalableText style={listText}>
           {children}
-        </ListText>
+        </ScalableText>
         {type === 'settings' ?
           <Switch
             trackColor={{ false: "#7e7e7e", true: `${Theme.colors.primary}` }}
@@ -33,7 +33,7 @@ const SettingsItem = (props) => {
             value={isEnabled}
           />
           :
-          <Ionicons name={'ios-arrow-dropright-circle'} size={24} color={Theme.colors.primary} />
+          <Entypo name={'chevron-small-right'} size={24} color={Theme.colors.primary} />
         }
       </ListItem>
     </TouchableWithoutFeedback>
@@ -42,12 +42,15 @@ const SettingsItem = (props) => {
 
 const ListItem = styled.View`
   background-color: #ffffff;
-  padding:16px 24px;
+  padding:15px 24px;
   flex-flow: row;
   justify-content: space-between;
   align-items: center;
 `
-const ListText = styled(Paragraph)`
-  margin-bottom: 0;
-`
+const listText = {
+  fontSize: 18,
+  lineHeight: 18 * 1.33,
+  fontFamily: 'Lato-Light',
+  color: '#202020',
+}
 export default SettingsItem;

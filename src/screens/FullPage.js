@@ -28,7 +28,6 @@ const PAGE_QUERY = gql`
 `
 
 const FullPage = ({ route }) => {
-  console.log(route.params)
   const databaseId = route.params.id;
   const { loading, error, data } = useQuery(PAGE_QUERY, {
     variables: { id: databaseId }
@@ -38,14 +37,16 @@ const FullPage = ({ route }) => {
 
   const { content } = data.page;
 
-  console.log(content)
+  const regex = /\[[^\]]+\]/g;
+
+  const cleanedContent = content.toString().replace(regex, '');
 
   return (
     <SafeAreaView>
       <ScrollView>
         <Container>
           <HTML
-            html={content}
+            html={cleanedContent}
             baseFontStyle={{ fontFamily: 'Lato-Regular' }}
             imagesMaxWidth={Dimensions.get('window').width - 48}
             {...htmlStyles} />

@@ -82,7 +82,9 @@ const FullEvent = ({ route }) => {
         const eventVenue = venuesList.edges.filter(filtered => filtered.node.databaseId === parseInt(venue));
         const eventOrganizer = organizersList.edges.filter(filtered => filtered.node.databaseId === parseInt(organizer));
 
-        console.log(eventOrganizer)
+        //Clean shorcodes from conten
+        const regex = /\[[^\]]+\]/g;
+        const cleanedContent = content.toString().replace(regex, '');
 
         return (
           <SafeAreaView>
@@ -106,7 +108,13 @@ const FullEvent = ({ route }) => {
                 </PostHeaderContainer>
               </PostHeader>
               <Container>
-                {content && <HTML html={content} baseFontStyle={{ fontFamily: 'Lato-Regular' }} {...htmlStyles} />}
+                {content && 
+                  <HTML
+                    html={cleanedContent}
+                    baseFontStyle={{ fontFamily: 'Lato-Regular' }}
+                    {...htmlStyles} 
+                  />
+                }
               </Container>
             </ScrollView>
           </SafeAreaView>

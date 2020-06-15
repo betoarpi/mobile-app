@@ -61,6 +61,11 @@ const FullPost = ({ route }) => {
           title,
           content,
         } = data.postBy;
+
+        //Clean shorcodes from conten
+        const regex = /\[[^\]]+\]/g;
+        const cleanedContent = content.toString().replace(regex, '');
+
         return (
           <SafeAreaView>
             <ScrollView>
@@ -78,7 +83,7 @@ const FullPost = ({ route }) => {
               </PostHeader>
               <Container>
                 <HTML
-                  html={content}
+                  html={cleanedContent}
                   baseFontStyle={{ fontFamily: 'Lato-Regular' }}
                   imagesMaxWidth={Dimensions.get('window').width - 48}
                   {...htmlStyles} />

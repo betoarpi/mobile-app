@@ -37,8 +37,8 @@ const FullPage = ({ route }) => {
 
   const { content } = data.page;
 
+  //Clean shorcodes from conten
   const regex = /\[[^\]]+\]/g;
-
   const cleanedContent = content.toString().replace(regex, '');
 
   return (

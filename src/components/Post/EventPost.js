@@ -51,8 +51,8 @@ const Post = (props) => {
         <View style={{ paddingHorizontal: 21 }}>
           <Header>
             {!eventCategories === null &&
-              <IconContainer>
-                <Icon style={styleIcon} source={{ uri: eventCategories.edges[0].node.categoryIcon.categoryIcon.sourceUrl }} />
+              <IconContainer style={styles.iconContainer}>
+                <Icon style={styles.icon} source={{ uri: eventCategories.edges[0].node.categoryIcon.categoryIcon.sourceUrl }} />
               </IconContainer>
             }
             <Container style={{ paddingHorizontal: 0 }}>
@@ -114,7 +114,16 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
 
     elevation: 3,
-  }
+    marginBottom: 10
+  },
+  iconContainer: {
+    width: Dimensions.get('window').width / 8,
+    height: Dimensions.get('window').width / 8
+  },
+  icon: {
+    width: Dimensions.get('window').width / 13,
+    height: Dimensions.get('window').width / 13
+  },
 });
 
 //HTML Component Styles
@@ -136,13 +145,6 @@ const styleDate = scaleText({
   fontSize: 16,
   lineHeight: 16 * 1.2,
 });
-
-const styleIcon = {
-  width: Dimensions.get('window').width * 0.4,
-  height: Dimensions.get('window').width * 0.4,
-};
-
-
 
 
 export default Post;

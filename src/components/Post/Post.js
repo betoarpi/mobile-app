@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableWithoutFeedback } from 'react-native';
+import { View, Text, StyleSheet, TouchableWithoutFeedback, Dimensions } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import moment from 'moment';
 import HTML from 'react-native-render-html';
@@ -30,14 +30,14 @@ const Post = (props) => {
     <CardContainer style={styles.shadow}>
       {featuredImage &&
         <TouchableWithoutFeedback onPress={handlePress}>
-          <FeaturedImage source={{ uri: featuredImage.sourceUrl }} />
+          <FeaturedImage source={{ uri: featuredImage.sourceUrl }} style={styles.image}/>
         </TouchableWithoutFeedback>
       }
       <View style={{ paddingHorizontal: 21 }}>
         <Header>
           {categories.edges.length > 0 &&
-            <IconContainer>
-              <Icon style={{ width: 24, height: 24 }} source={{ uri: categories.edges[0].node.categoryIcon.categoryIcon.sourceUrl }} />
+            <IconContainer style={styles.iconContainer}>
+              <Icon style={styles.icon} source={{ uri: categories.edges[0].node.categoryIcon.categoryIcon.sourceUrl }} />
             </IconContainer>
           }
           <Container style={{ paddingHorizontal: 0 }}>
@@ -92,7 +92,19 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
 
     elevation: 3,
-  }
+    marginBottom: 10,
+  },
+  iconContainer: {
+    width: Dimensions.get('window').width / 8,
+    height: Dimensions.get('window').width / 8
+  },
+  icon: {
+    width: Dimensions.get('window').width / 13,
+    height: Dimensions.get('window').width / 13
+  },
+  image: {
+    height: Dimensions.get('window').width * 0.52,
+  },
 });
 
 //HTML Component Styles

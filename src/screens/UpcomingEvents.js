@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Text } from 'react-native';
+import { Text, ScrollView } from 'react-native';
 import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
 import moment from 'moment';
@@ -87,6 +87,7 @@ const UpcomingEvents = (props) => {
         if (error) return <DataError />;
         if (!data.events.edges.length) return <Text>There are no events.</Text>;
         return (
+          <ScrollView>
           <EventsList
             data={data.events}
             venuesList={data.eventVenues}
@@ -96,6 +97,7 @@ const UpcomingEvents = (props) => {
             selectedDate={date}
             handleDate={handleDate}
           />
+         </ScrollView>
         );
       }}
     </Query >

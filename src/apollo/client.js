@@ -11,7 +11,8 @@ const cache = new InMemoryCache({ fragmentMatcher });
 
 const client = new ApolloClient({
   cache,
-  uri: 'https://wschoolsdev.wpengine.com/graphql'
+  uri: 'https://wschoolsdev.wpengine.com/graphql',
+  resolvers: {}
 });
 
 export default client;

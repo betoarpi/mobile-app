@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { TouchableWithoutFeedback } from 'react-native';
 import { Switch } from 'react-native';
 import styled from 'styled-components';
@@ -8,9 +8,12 @@ import { Entypo } from '@expo/vector-icons';
 import Theme from '../theme/Theme';
 
 const SettingsItem = (props) => {
-  const { children, selected, type, handlePress, databaseId } = props;
-  const [isEnabled, setIsEnabled] = useState(selected);
-  const toggleSwitch = () => setIsEnabled(previousState => !previousState);
+  const { children, type, handlePress, databaseId, settingsName, handleSettings, active } = props;
+  
+  function toggleSwitch() {
+    handleSettings()
+  };
+
   return (
     <TouchableWithoutFeedback
       onPress={
@@ -30,7 +33,7 @@ const SettingsItem = (props) => {
             thumbColor="#ffffff"
             ios_backgroundColor="#7e7e7e"
             onValueChange={toggleSwitch}
-            value={isEnabled}
+            value={active === 'enabled' ? true : false}
           />
           :
           <Entypo name={'chevron-small-right'} size={24} color={Theme.colors.primary} />

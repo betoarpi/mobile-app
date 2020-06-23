@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ScrollView, StyleSheet, Text, Dimensions } from 'react-native';
+import {SafeAreaView, ScrollView, StyleSheet, Text, Dimensions, View } from 'react-native';
 import HTML from 'react-native-render-html';
 const Entities = require('html-entities').XmlEntities;
 import {Ionicons} from '@expo/vector-icons';
@@ -22,6 +22,8 @@ import moment from 'moment';
 
 import ScalableText from 'react-native-text';
 import { scaleText } from 'react-native-text';
+
+import { Dropdown } from 'react-native-material-dropdown';
 
 const entities = new Entities();
 
@@ -114,64 +116,112 @@ const TheMenu = ({ data }) => {
   const iconWidth = Dimensions.get('window').width / 8;
   const iconWidthPx = iconWidth + 'px';
 
+  let dataSchools = [
+    {
+      value: 'Cherokee Elementary'
+    },
+    {
+      value: 'Helen Paul Learning Center'
+    },
+    {
+      value: 'High School'
+    },
+    {
+      value: 'Wells Middle School'
+    }]
+
   return (
-    <ScrollView style={styles.wrapper}>
-      <FeaturedImage style={{ height: imageHeight }}>
-        {isMeal === 'Breakfast' ?
-          BreakfastMenu[0].featuredImage && <MainImg source={{ uri: BreakfastMenu[0].featuredImage.sourceUrl }} />
-          :
-          LunchMenu[0].featuredImage && <MainImg source={{ uri: LunchMenu[0].featuredImage.sourceUrl }} />
-        }
-        <WeekNavigation
-          weekDates={weekDates}
-          calendarDate={activeDate}
-          handleDateToShow={handleDateToShow}
-          handleIsWeek={handleIsWeek}
+    <SafeAreaView style={styles.safeArea}>
+      <Dropdown
+        label="Select Different School to check the menu"
+        data={dataSchools}
+        style={{color:'white'}}
+        value={'Wells Middle School'}
+        containerStyle={{marginHorizontal: 10, marginBottom: 0,}}
+        pickerStyle={styles.dropdownPicker}
+        itemTextStyle={styles.dropdownitemTextStyle}
+        baseColor={'rgba(255, 255, 255, 0.8)'}
+        textColor={'rgba(255, 255, 255, 1)'}
+        overlayStyle={styles.dropdownoverlayStyle}
+        rippleInsets={{top: 20}}
         />
-      </FeaturedImage >
-      <PostHeader style={styles.shadow}>
-        <IconContainer height={iconWidthPx} width={iconWidthPx}>
-          <Ionicons name={'md-restaurant'} size={24} color={'#ffffff'} />
-        </IconContainer>
-        <PostHeaderContainer>
-          <Title>
-            <ScalableText style={styles.title}>
-              {isMeal === 'Breakfast' ?
-                entities.decode(BreakfastMenu[0].title)
-                :
-                entities.decode(LunchMenu[0].title)
-              }
-            </ScalableText>
-          </Title>
-          <Date>
-            <ScalableText style={styles.date}>
-              {`${isMeal} for ${dayToShow}`}
-            </ScalableText>
-          </Date>
-        </PostHeaderContainer>
-      </PostHeader>
-      <Container>
-        <HTML
-          html={
-            isMeal === 'Breakfast' ?
-              BreakfastMenu[0].content
-              :
-              LunchMenu[0].content
+        
+      <ScrollView style={styles.wrapper}>
+        <FeaturedImage style={{ height: imageHeight }}>
+          {isMeal === 'Breakfast' ?
+            BreakfastMenu[0].featuredImage && <MainImg source={{ uri: BreakfastMenu[0].featuredImage.sourceUrl }} />
+            :
+            LunchMenu[0].featuredImage && <MainImg source={{ uri: LunchMenu[0].featuredImage.sourceUrl }} />
           }
-          imagesMaxWidth={Dimensions.get('window').width - 48}
-          baseFontStyle={{ fontFamily: 'Lato-Regular' }}
-          {...htmlStyles}
-        />
-        <PrimaryButton
-          onPress={handleMeal}
-          text={isMeal === 'Breakfast' ? "See Lunch Menu" : "See Breakfast Menu"}
-        />
-      </Container>
-    </ScrollView>
+          <WeekNavigation
+            weekDates={weekDates}
+            calendarDate={activeDate}
+            handleDateToShow={handleDateToShow}
+            handleIsWeek={handleIsWeek}
+          />
+          
+        </FeaturedImage >
+        <PostHeader style={styles.shadow}>
+          <IconContainer height={iconWidthPx} width={iconWidthPx}>
+            <Ionicons name={'md-restaurant'} size={24} color={'#ffffff'} />
+          </IconContainer>
+          <PostHeaderContainer>
+            <Title>
+              <ScalableText style={styles.title}>
+                {isMeal === 'Breakfast' ?
+                  entities.decode(BreakfastMenu[0].title)
+                  :
+                  entities.decode(LunchMenu[0].title)
+                }
+              </ScalableText>
+            </Title>
+            <Date>
+              <ScalableText style={styles.date}>
+                {`${isMeal} for ${dayToShow}`}
+              </ScalableText>
+            </Date>
+          </PostHeaderContainer>
+        </PostHeader>
+        <Container>
+          <HTML
+            html={
+              isMeal === 'Breakfast' ?
+                BreakfastMenu[0].content
+                :
+                LunchMenu[0].content
+            }
+            imagesMaxWidth={Dimensions.get('window').width - 48}
+            baseFontStyle={{ fontFamily: 'Lato-Regular' }}
+            {...htmlStyles}
+          />
+          <PrimaryButton
+            onPress={handleMeal}
+            text={isMeal === 'Breakfast' ? "See Lunch Menu" : "See Breakfast Menu"}
+          />
+        </Container>
+      </ScrollView>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
+  safeArea: {
+    backgroundColor: Theme.colors.primary,
+    flex: 1,
+  },
+  dropdownPicker: {
+    backgroundColor: Theme.colors.primary,
+    top: '50%',
+    display: 'flex',
+    position: 'relative',
+
+  },
+  dropdownitemTextStyle:{
+    color: 'white'
+  },
+  dropdownoverlayStyle: {
+    backgroundColor: 'rgba(0, 0, 0, 0.5)'
+  },
   paddingH: {
     paddingHorizontal: 24
   },
@@ -188,13 +238,15 @@ const styles = StyleSheet.create({
   },
   wrapper: {
     flex: 1,
+    backgroundColor: 'white',
   },
   title: {
     fontSize: 18,
   },
   date: {
     fontSize: 16,
-  }
+  },
+
 });
 
 //HTML Component Styles

@@ -23,6 +23,7 @@
     "@react-navigation/material-bottom-tabs": "^5.2.5",
     "@react-navigation/native": "^5.2.1",
     "@react-navigation/stack": "^5.2.16",
+    "@titelmedia/react-apollo-multiple-clients": "^4.0.4",
     "@types/react": "^16.9.35",
     "add": "^2.0.6",
     "apollo-boost": "^0.4.7",

@@ -33,30 +33,20 @@ const STORAGE_KEY = '@save_notifications';
 
 const More = props => {
   //Handle notifications
-  const [notifications, setNotifications] = useState('');
+  const [notifications, setNotifications] = useState(false);
 
   useEffect(() => {
     readData()
-  }, [])
+  }, []);
 
-  const saveData = async () => {
-    try {
-      await AsyncStorage.setItem(STORAGE_KEY, notifications);
-      alert(`Data successfully saved to ${notifications}`);
-    } catch (error) {
-      console.log(error);
-      alert('Failed to save the data to the storage');
-    }
-  }
+  console.log(`Initial State: ${notifications}`);
 
   const readData = async () => {
     try {
       const showNotifications = await AsyncStorage.getItem(STORAGE_KEY);
 
-      console.log(showNotifications === null ? 'empty' : showNotifications);
-
       if (showNotifications !== null) {
-        setNotifications(showNotifications);
+        setNotifications(JSON.parse(showNotifications));
       }
 
     } catch (error) {
@@ -64,6 +54,15 @@ const More = props => {
     }
   }
 
+  const saveData = async (notifications) => {
+    try {
+      await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(notifications));
+      alert(`Data successfully saved to ${notifications}`);
+    } catch (error) {
+      console.log(error);
+      alert('Failed to save the data to the storage');
+    }
+  }
   
   const clearStorage = async () => {
     try {
@@ -74,17 +73,18 @@ const More = props => {
       alert('Error clearing storage!')
     }
   }
+
+  //clearStorage()
+
+  /* const handleActive = (isActive) => {
+    setIsActive(previousState => !previousState);
+    saveData(isActive);
+  } */
   
-  function handleNotifications() {
-    if(notifications !== 'enabled') {
-      console.log('needs to be enabled');
-      setNotifications('enabled');
-      saveData(notifications);
-    } else {
-      console.log('needs to be disabled');
-      setNotifications('');
-      saveData(notifications);
-    }
+  const handleNotifications = (notificationsState) => {
+    setNotifications(previousState => !previousState);
+    console.log(`This is the data to save: ${notificationsState}`)
+    saveData(notificationsState);
   }
   //Navigation props
   const navigation = useNavigation();

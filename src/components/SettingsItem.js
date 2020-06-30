@@ -8,11 +8,7 @@ import { Entypo } from '@expo/vector-icons';
 import Theme from '../theme/Theme';
 
 const SettingsItem = (props) => {
-  const { children, type, handlePress, databaseId, settingsName, handleSettings, active } = props;
-  
-  function toggleSwitch() {
-    handleSettings()
-  };
+  const { children, type, handlePress, databaseId, handleSettings, active } = props;
 
   return (
     <TouchableWithoutFeedback
@@ -32,8 +28,8 @@ const SettingsItem = (props) => {
             trackColor={{ false: "#7e7e7e", true: `${Theme.colors.primary}` }}
             thumbColor="#ffffff"
             ios_backgroundColor="#7e7e7e"
-            onValueChange={toggleSwitch}
-            value={active === 'enabled' ? true : false}
+            onValueChange={handleSettings}
+            value={active}
           />
           :
           <Entypo name={'chevron-small-right'} size={24} color={Theme.colors.primary} />

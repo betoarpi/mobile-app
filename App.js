@@ -29,6 +29,7 @@ import Home from './src/screens/Home';
 import FullPost from './src/screens/FullPost';
 import FullEvent from './src/screens/FullEvent';
 import FullPage from './src/screens/FullPage';
+import Preferences from './src/screens/Preferences';
 
 import WeeklyMenu from './src/screens/WeeklyMenu';
 import UpcomingEvents from './src/screens/UpcomingEvents';
@@ -203,6 +204,17 @@ export default function App(props) {
                   }}
                 >
                   {props => <Layout><FullPage {...props} theme={Theme} /></Layout>}
+                </Stack.Screen>
+                <Stack.Screen name='Preferences'
+                  options={{
+                    title: 'Select your interests',
+                    headerStyle: {
+                      backgroundColor: schoolTheme.colors.primary
+                    },
+                    headerTintColor: schoolTheme.colors.card,
+                  }}
+                >
+                  {props => <Layout><Preferences {...props} theme={Theme} /></Layout>}
                 </Stack.Screen>
               </Stack.Navigator>
             )

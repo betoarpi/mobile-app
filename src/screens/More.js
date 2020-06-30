@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import { FlatList } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { useQuery } from '@apollo/react-hooks';
+import { useQuery } from 'react-apollo';
 import gql from 'graphql-tag';
 import styled from 'styled-components';
 import AsyncStorage from '@react-native-community/async-storage';
@@ -39,7 +39,7 @@ const More = props => {
     readData()
   }, []);
 
-  console.log(`Initial State: ${notifications}`);
+  //console.log(`Initial State: ${notifications}`);
 
   const readData = async () => {
     try {
@@ -74,18 +74,14 @@ const More = props => {
     }
   }
 
-  //clearStorage()
-
-  /* const handleActive = (isActive) => {
-    setIsActive(previousState => !previousState);
-    saveData(isActive);
-  } */
+  //clearStorage() helper function to clear ALL storage, not of real use in PROD
   
   const handleNotifications = (notificationsState) => {
+    //console.log(notificationsState);
     setNotifications(previousState => !previousState);
-    console.log(`This is the data to save: ${notificationsState}`)
     saveData(notificationsState);
   }
+
   //Navigation props
   const navigation = useNavigation();
 
@@ -95,6 +91,10 @@ const More = props => {
   if (error) return <DataError />
 
   const handlePress = (databaseId) => navigation.navigate('Full Page', { id: databaseId });
+
+  const handlePage = (pageName) => navigation.navigate(pageName);
+  
+  //console.log(navigation);
 
   const pages = data.appSettings.website_pages.pages;
   const school = data.appSettings.school_settings;
@@ -124,7 +124,13 @@ const More = props => {
           Turn on notifications
         </SettingsItem>
         <Separator />
-        <SettingsItem type='page' handlePress={handlePress}>Preferences</SettingsItem>
+        <SettingsItem
+          type='page'
+          pageName={'Preferences'}
+          handlePage={handlePage}
+        >
+          Preferences
+        </SettingsItem>
       </ListContainer>
     </SettingsLayout >
   );

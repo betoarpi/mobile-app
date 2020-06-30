@@ -8,12 +8,25 @@ import { Entypo } from '@expo/vector-icons';
 import Theme from '../theme/Theme';
 
 const SettingsItem = (props) => {
-  const { children, type, handlePress, databaseId, handleSettings, active } = props;
+  const {
+    active,
+    children,
+    databaseId,
+    handlePage,
+    handlePress,
+    handleSettings,
+    pageName,
+    type } = props;
 
   return (
     <TouchableWithoutFeedback
       onPress={
         type === 'settings' ? null
+          :
+          type === 'page' ?
+          () => {
+            handlePage(pageName)
+          }
           :
           () => {
             handlePress(databaseId)

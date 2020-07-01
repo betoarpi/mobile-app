@@ -9,6 +9,7 @@ import { ApolloProvider } from 'react-apollo';
 import client from './src/apollo/client';
 import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
+import AsyncStorage from '@react-native-community/async-storage';
 
 import { AppearanceProvider } from 'react-native-appearance';
 
@@ -62,8 +63,72 @@ const APP_SETTINGS = gql`
   }
 `
 
+// AsyncStorage Keys
+const SETTINGS_KEY = '@save_settings';
+const LOGO_KEY = '@save_logo';
+
 export default function App(props) {
-  const [isLoadingComplete, setLoadingComplete] = useState(false);
+  const [appSettings, setAppSettings] = useState({});
+
+  useEffect(() => {
+    readData();
+  }, []);
+  
+  useEffect(() => {
+    saveData(SETTINGS_KEY, appSettings);
+    //
+    setLogo(appSettings.school_settings && appSettings.school_settings.schoolLogo.sourceUrl);
+  }, [appSettings]);
+
+  const readData = async () => {
+    try {
+      const userPreferences = await AsyncStorage.getItem('@save_preferences')
+      
+      if (userPreferences !== null) {
+        console.log(JSON.parse(userPreferences));
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  const saveData = async (key, value) => {
+    try {
+      await AsyncStorage.setItem(key, JSON.stringify(value));
+      //alert('Settings succesfully saved to the store.')
+    } catch (error) {
+      console.log(error);
+      //alert('Fail to save Settings to the store.')
+    }
+  }
+
+  const clearStorage = async () => {
+    try {
+      await AsyncStorage.clear();
+      alert('Storage cleared!')
+    } catch (error) {
+      console.log(error)
+      alert('Error clearing storage!')
+    }
+  }
+
+  //clearStorage() //helper function to clear ALL storage, not of real use in PROD
+
+  //funtion to save settings once query is complete
+  const handleSettings = (data) => {
+    setAppSettings(data.appSettings);
+  }
+
+  //Retriving Logo
+  const [logo, setLogo] = useState('');
+
+  useState(() => {
+    saveData(LOGO_KEY, logo);
+  }, [logo]);
+
+  //Load resources
+  const [loadingComplete, setLoadingComplete] = useState(false);
+  
   useEffect(() => {
     async function loadResourcesAndDataAsync() {
       try {
@@ -109,6 +174,8 @@ export default function App(props) {
             data ? data.appSettings.school_settings.schoolLogo.sourceUrl : 'Loading...'
           } />;
           if (error) return <Text>Error! {error.message}</Text>;
+
+          handleSettings(data);
 
           const schoolTheme = {
             dark: false,
@@ -277,4 +344,3 @@ export default function App(props) {
   );
 
 };
-

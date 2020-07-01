@@ -74,7 +74,7 @@ const More = props => {
     }
   }
 
-  //clearStorage() helper function to clear ALL storage, not of real use in PROD
+  //clearStorage() //helper function to clear ALL storage, not of real use in PROD
   
   const handleNotifications = (notificationsState) => {
     //console.log(notificationsState);

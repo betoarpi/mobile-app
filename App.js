@@ -68,6 +68,7 @@ const SETTINGS_KEY = '@save_settings';
 const LOGO_KEY = '@save_logo';
 
 export default function App(props) {
+  const [userPreferences, setUserPreferences] = useState([]);
   const [appSettings, setAppSettings] = useState({});
 
   useEffect(() => {
@@ -82,10 +83,17 @@ export default function App(props) {
 
   const readData = async () => {
     try {
-      const userPreferences = await AsyncStorage.getItem('@save_preferences')
+      //Retrive alrady stored key from Preferences view
+      let storedPreferences = await AsyncStorage.getItem('@save_preferences');
       
-      if (userPreferences !== null) {
-        console.log(JSON.parse(userPreferences));
+      if (storedPreferences !== null) {
+        let preferencesList = JSON.parse(storedPreferences);
+        let newList = [];
+        for (const [key, value] of Object.entries(preferencesList)) {
+          const filterKey = key.replace(/_/g, '-');
+          value === true ? newList.push(filterKey) : null
+        }
+        setUserPreferences(newList);
       }
     } catch (error) {
       console.log(error);
@@ -165,7 +173,6 @@ export default function App(props) {
     loadResourcesAndDataAsync();
   }, []);
 
-
   return (
     <ApolloProvider client={client}>
       <Query query={APP_SETTINGS}>
@@ -181,11 +188,18 @@ export default function App(props) {
             dark: false,
             colors: {
               primary: data.appSettings.color_settings.primaryColor,
+              primaryLighten: data.appSettings.color_settings.primaryLighter,
               background: data.appSettings.color_settings.backgroundColor,
               card: data.appSettings.color_settings.cardColor,
               text: data.appSettings.color_settings.textColor,
               border: data.appSettings.color_settings.borderColor,
               icon: data.appSettings.color_settings.iconColor,
+              overPrimary: data.appSettings.color_settings.cardColor,
+              shadow: 'rgb(138, 138, 138)',
+            },
+            fontSizes: {
+              schoolName: '22px',
+              regular: '18px'
             }
           };
 
@@ -194,14 +208,22 @@ export default function App(props) {
               <Stack.Navigator>
                 <Stack.Screen name='Home'
                   options={{
-                    title: `${data.appSettings.school_settings.schoolName}`,
+                    title: `${appSettings.school_settings && appSettings.school_settings.schoolName}`,
                     headerStyle: {
                       backgroundColor: schoolTheme.colors.primary
                     },
                     headerTintColor: schoolTheme.colors.card,
                   }}
                 >
-                  {props => <Layout><Home {...props} theme={Theme} /></Layout>}
+                  {props => 
+                    <Layout>
+                      <Home
+                        {...props}
+                        theme={schoolTheme}
+                        preferences={userPreferences}
+                      />
+                    </Layout>
+                  }
                 </Stack.Screen>
                 <Stack.Screen name='Full Post'
                   options={{
@@ -212,7 +234,7 @@ export default function App(props) {
                     headerTintColor: schoolTheme.colors.card,
                   }}
                 >
-                  {props => <Layout><FullPost {...props} theme={Theme} /></Layout>}
+                  {props => <Layout><FullPost {...props} theme={schoolTheme} /></Layout>}
                 </Stack.Screen>
               </Stack.Navigator>
             )
@@ -230,7 +252,7 @@ export default function App(props) {
                     headerTintColor: schoolTheme.colors.card,
                   }}
                 >
-                  {props => <Layout><UpcomingEvents {...props} theme={Theme} /></Layout>}
+                  {props => <Layout><UpcomingEvents {...props} theme={schoolTheme} /></Layout>}
                 </Stack.Screen>
                 <Stack.Screen name='Full Event'
                   options={{
@@ -241,7 +263,7 @@ export default function App(props) {
                     headerTintColor: schoolTheme.colors.card,
                   }}
                 >
-                  {props => <Layout><FullEvent {...props} theme={Theme} /></Layout>}
+                  {props => <Layout><FullEvent {...props} theme={schoolTheme} /></Layout>}
                 </Stack.Screen>
               </Stack.Navigator>
             )
@@ -259,7 +281,7 @@ export default function App(props) {
                     headerTintColor: schoolTheme.colors.card,
                   }}
                 >
-                  {props => <Layout><More {...props} theme={Theme} /></Layout>}
+                  {props => <Layout><More {...props} theme={schoolTheme} /></Layout>}
                 </Stack.Screen>
                 <Stack.Screen name='Full Page'
                   options={{
@@ -270,7 +292,7 @@ export default function App(props) {
                     headerTintColor: schoolTheme.colors.card,
                   }}
                 >
-                  {props => <Layout><FullPage {...props} theme={Theme} /></Layout>}
+                  {props => <Layout><FullPage {...props} theme={schoolTheme} /></Layout>}
                 </Stack.Screen>
                 <Stack.Screen name='Preferences'
                   options={{
@@ -281,7 +303,7 @@ export default function App(props) {
                     headerTintColor: schoolTheme.colors.card,
                   }}
                 >
-                  {props => <Layout><Preferences {...props} theme={Theme} /></Layout>}
+                  {props => <Layout><Preferences {...props} theme={schoolTheme} /></Layout>}
                 </Stack.Screen>
               </Stack.Navigator>
             )
@@ -289,7 +311,7 @@ export default function App(props) {
 
           return (
             <AppearanceProvider>
-              <ThemeProvider theme={Theme}>
+              <ThemeProvider theme={schoolTheme}>
                 <NavigationContainer theme={schoolTheme}>
                   <MenuTabs.Navigator
                     barStyle={{ backgroundColor: schoolTheme.colors.card }}
@@ -313,7 +335,7 @@ export default function App(props) {
                         )
                       }}
                     >
-                      {props => <Layout><WeeklyMenu {...props} theme={Theme} /></Layout>}
+                      {props => <Layout><WeeklyMenu {...props} theme={schoolTheme} /></Layout>}
                     </MenuTabs.Screen>
                     <MenuTabs.Screen name="Events"
                       component={EventsStack}

@@ -12,7 +12,7 @@ const SettingsItem = (props) => {
     active,
     children,
     databaseId,
-    handlePage,
+    handlePreferences,
     handlePress,
     handleSettings,
     pageName,
@@ -23,9 +23,9 @@ const SettingsItem = (props) => {
       onPress={
         type === 'settings' ? null
           :
-          type === 'page' ?
+          type === 'preferences' ?
           () => {
-            handlePage(pageName)
+            handlePreferences(pageName)
           }
           :
           () => {

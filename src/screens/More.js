@@ -57,10 +57,10 @@ const More = props => {
   const saveData = async (notifications) => {
     try {
       await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(notifications));
-      alert(`Data successfully saved to ${notifications}`);
+      //alert(`Data successfully saved to ${notifications}`);
     } catch (error) {
       console.log(error);
-      alert('Failed to save the data to the storage');
+      //alert('Failed to save the data to the storage');
     }
   }
   
@@ -92,7 +92,7 @@ const More = props => {
 
   const handlePress = (databaseId) => navigation.navigate('Full Page', { id: databaseId });
 
-  const handlePage = (pageName) => navigation.navigate(pageName);
+  const handlePreferences = (pageName) => navigation.navigate(pageName);
   
   //console.log(navigation);
 
@@ -125,9 +125,9 @@ const More = props => {
         </SettingsItem>
         <Separator />
         <SettingsItem
-          type='page'
+          type='preferences'
           pageName={'Preferences'}
-          handlePage={handlePage}
+          handlePreferences={handlePreferences}
         >
           Preferences
         </SettingsItem>

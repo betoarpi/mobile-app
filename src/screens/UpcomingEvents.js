@@ -7,6 +7,7 @@ import moment from 'moment';
 import EventsList from '../containers/EventsList';
 import PostListSkeleton from '../containers/PostListSkeleton';
 import DataError from '../components/DataError';
+import NoEvents from '../components/NoEvents';
 
 const ALL_EVENTS_QUERY = gql`
   query ALL_EVENTS_QUERY($cursor: String) {
@@ -85,7 +86,7 @@ const UpcomingEvents = (props) => {
       {({ loading, error, data, fetchMore }) => {
         if (loading) return <PostListSkeleton />;
         if (error) return <DataError />;
-        if (!data.events.edges.length) return <Text>There are no events.</Text>;
+        if (!data.events.edges.length) return <NoEvents />;
         return (
           <ScrollView>
           <EventsList

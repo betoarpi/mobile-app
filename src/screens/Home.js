@@ -41,6 +41,14 @@ const ALL_POSTS_QUERY = gql`
                 name
               }
             }
+            districtSchools {
+              edges {
+                node {
+                  slug
+                  name
+                }
+              }
+            }
           }
           __typename
           ... on Event {
@@ -77,6 +85,14 @@ const ALL_POSTS_QUERY = gql`
                 name
               }
             }
+            districtSchools {
+              edges {
+                node {
+                  slug
+                  name
+                }
+              }
+            }
           }
         }
       }
@@ -103,24 +119,32 @@ const ALL_POSTS_QUERY = gql`
         }
       }
     }
+    districtSchools {
+      edges {
+        node {
+          slug
+        }
+      }
+    }
   }
 `;
 
 const Home = (props) => {
-  const { theme } = props;
+  const { theme, preferences } = props;
   return (
     <Query query={ALL_POSTS_QUERY}>
       {({ loading, error, data, fetchMore }) => {
         if (loading) return <PostListSkeleton />;
         if (error) return <DataError />;
         if (!data.contentNodes.edges.length) return <Text>There are no posts.</Text>;
-        
+
         return (
           <PostList
             data={data.contentNodes}
             venuesList={data.eventVenues}
             organizersList={data.eventOrganizers}
             theme={theme}
+            preferences={preferences}
             fetchMore={fetchMore} />
         );
       }}

@@ -31,7 +31,7 @@ const APP_SETTINGS = gql`
 
 const STORAGE_KEY = '@save_notifications';
 
-const More = props => {
+const More = ({theme}) => {
   //Handle notifications
   const [notifications, setNotifications] = useState(false);
 
@@ -39,7 +39,7 @@ const More = props => {
     readData()
   }, []);
 
-  //console.log(`Initial State: ${notifications}`);
+  console.log(theme.colors.primary);
 
   const readData = async () => {
     try {
@@ -57,10 +57,10 @@ const More = props => {
   const saveData = async (notifications) => {
     try {
       await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(notifications));
-      alert(`Data successfully saved to ${notifications}`);
+      //alert(`Data successfully saved to ${notifications}`);
     } catch (error) {
       console.log(error);
-      alert('Failed to save the data to the storage');
+      //alert('Failed to save the data to the storage');
     }
   }
   
@@ -92,7 +92,7 @@ const More = props => {
 
   const handlePress = (databaseId) => navigation.navigate('Full Page', { id: databaseId });
 
-  const handlePage = (pageName) => navigation.navigate(pageName);
+  const handlePreferences = (pageName, theme) => navigation.navigate(pageName, theme);
   
   //console.log(navigation);
 
@@ -107,7 +107,13 @@ const More = props => {
       <ListContainer>
         <FlatList
           data={pages}
-          renderItem={({ item }) => <SettingsItem type='page' handlePress={handlePress} {...item}>{item.title}</SettingsItem>}
+          renderItem={({ item }) => <SettingsItem 
+            type='page'
+            handlePress={handlePress}
+            theme={theme}
+            {...item}>
+            {item.title}
+          </SettingsItem>}
           ItemSeparatorComponent={ListSeparator}
         />
       </ListContainer>
@@ -119,15 +125,17 @@ const More = props => {
           type='settings'
           settingsName='notifications'
           handleSettings={handleNotifications}
+          theme={theme}
           active={notifications}
         >
           Turn on notifications
         </SettingsItem>
         <Separator />
         <SettingsItem
-          type='page'
+          type='preferences'
           pageName={'Preferences'}
-          handlePage={handlePage}
+          handlePreferences={handlePreferences}
+          theme={theme}
         >
           Preferences
         </SettingsItem>

@@ -1,49 +1,58 @@
 import React from 'react';
-import Text from 'react-native';
+import {Text} from 'react-native';
 import TheMenu from '../containers/Menu';
-import { useQuery } from 'react-apollo';
-import ApolloClient from "apollo-boost";
+import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
 import PostSkeleton from '../components/Post/PostSkeleton';
 import DataError from '../components/DataError';
 import {Ionicons} from '@expo/vector-icons';
 
-const keystoneClient = new ApolloClient({
-  uri: 'https://keystone.wschoolsdev.wpengine.com/graphql',
-});
-
 
 const WEEKLY_MENU_POSTS_QUERY = gql`
   query WEEKLY_MENU_POSTS_QUERY {
-    posts {
-      title
+    tags(where: {name: ["lunch", "breakfast"]}, last: 10) {
+      edges {
+        node {
+          slug
+          events {
+            edges {
+              node {
+                databaseId
+                title
+                content
+                start_date
+                tags {
+                  edges {
+                    node {
+                      slug
+                      name
+                    }
+                  }
+                }
+                featuredImage {
+                  sourceUrl(size: MEDIUM)
+                }
+              }
+            }
+          }
+        }
+      }
     }
   }
 `
-
-const KeystoneMenu = () => {
-  const {loading, error, data } = useQuery(
-    WEEKLY_MENU_POSTS_QUERY,
-    { client:  keystoneClient }
-  );
-
-  if(loading) return <PostSkeleton/>;
-  if(error){
-    console.log(error);
-    return <DataError />
-  };
-  
-  console.log(data);
-
+const WeeklyMenu = ({theme}) => {
   return (
-    <Text>Data loaded!</Text>
-  );
-};
+    <Query query={WEEKLY_MENU_POSTS_QUERY}>
+      {({ loading, error, data }) => {
+        if (loading) return <PostSkeleton />;
+        if (error) return <DataError />;
+        if (!data.tags.edges.length) return <Text>There are no posts.</Text>;
 
-
-const WeeklyMenu = () => {
-  return (
-    <KeystoneMenu />
+        return (
+            <TheMenu data={data} theme={theme} />
+          );
+        }}
+    </Query>
   );
 };
 

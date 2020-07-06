@@ -27,7 +27,8 @@ import { Dropdown } from 'react-native-material-dropdown';
 
 const entities = new Entities();
 
-const TheMenu = ({ data }) => {
+const TheMenu = ({ data, theme }) => {
+  console.log(theme);
   const handleWeekDay = () => {
     if (moment().isoWeekday() <= 5) {
       return moment().format('ddd');
@@ -37,7 +38,8 @@ const TheMenu = ({ data }) => {
   }
   const today = handleWeekDay();
   const tagEvents = data.tags.edges;
-  const [isMeal, setIsMeal] = useState(moment().format('hh') < 12 ? 'Breakfast' : 'Lunch');
+  //const [isMeal, setIsMeal] = useState(moment().format('HH') < 12 ? 'Breakfast' : 'Lunch');
+  const [isMeal, setIsMeal] = useState('Lunch');
   const [dayToShow, setDayToShow] = useState(today);
   const [isWeek, setIsWeek] = useState(0);
 
@@ -101,7 +103,7 @@ const TheMenu = ({ data }) => {
   })
 
   const handleMeal = () => {
-    setIsMeal(isMeal === 'Breakfast' ? 'Lunch' : 'Breakfast');
+    //setIsMeal(isMeal === 'Breakfast' ? 'Lunch' : 'Breakfast');
   }
 
   const handleIsWeek = (direction) => {
@@ -130,6 +132,8 @@ const TheMenu = ({ data }) => {
       value: 'Wells Middle School'
     }]
 
+  console.log(isMeal);
+
   return (
     <SafeAreaView style={styles.safeArea}>
       <Dropdown
@@ -147,9 +151,9 @@ const TheMenu = ({ data }) => {
         />
         
       <ScrollView style={styles.wrapper}>
-        <FeaturedImage style={{ height: imageHeight }}>
+        <FeaturedImage  theme={theme} style={{ height: imageHeight }}>
           {isMeal === 'Breakfast' ?
-            BreakfastMenu[0].featuredImage && <MainImg source={{ uri: BreakfastMenu[0].featuredImage.sourceUrl }} />
+            BreakfastMenu.length > 0 && BreakfastMenu[0].featuredImage && <MainImg source={{ uri: BreakfastMenu[0].featuredImage.sourceUrl }} />
             :
             LunchMenu[0].featuredImage && <MainImg source={{ uri: LunchMenu[0].featuredImage.sourceUrl }} />
           }
@@ -168,7 +172,7 @@ const TheMenu = ({ data }) => {
           <PostHeaderContainer>
             <Title>
               <ScalableText style={styles.title}>
-                {isMeal === 'Breakfast' ?
+                {BreakfastMenu.length > 0 && isMeal === 'Breakfast' ?
                   entities.decode(BreakfastMenu[0].title)
                   :
                   entities.decode(LunchMenu[0].title)
@@ -185,7 +189,7 @@ const TheMenu = ({ data }) => {
         <Container>
           <HTML
             html={
-              isMeal === 'Breakfast' ?
+              BreakfastMenu.length > 0 && isMeal === 'Breakfast' ?
                 BreakfastMenu[0].content
                 :
                 LunchMenu[0].content
@@ -194,10 +198,10 @@ const TheMenu = ({ data }) => {
             baseFontStyle={{ fontFamily: 'Lato-Regular' }}
             {...htmlStyles}
           />
-          <PrimaryButton
+          {/* <PrimaryButton
             onPress={handleMeal}
             text={isMeal === 'Breakfast' ? "See Lunch Menu" : "See Breakfast Menu"}
-          />
+          /> */}
         </Container>
       </ScrollView>
     </SafeAreaView>
@@ -206,11 +210,11 @@ const TheMenu = ({ data }) => {
 
 const styles = StyleSheet.create({
   safeArea: {
-    backgroundColor: Theme.colors.primary,
+    backgroundColor: '#00421c',
     flex: 1,
   },
   dropdownPicker: {
-    backgroundColor: Theme.colors.primary,
+    backgroundColor: '#00421c',
     top: '50%',
     display: 'flex',
     position: 'relative',
@@ -259,7 +263,7 @@ const htmlStyles = {
       fontFamily: 'Lato-Light',
     },
     a: {
-      color: Theme.colors.primary,
+      color: '#00421c',
       fontSize: 18,
       marginBottom: 16,
       lineHeight: 26,

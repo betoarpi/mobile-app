@@ -26,7 +26,7 @@ const DISTRICT_SCHOOLS = gql`
 
 const STORAGE_KEYS = '@save_preferences';
 
-const Preferences = () => {
+const Preferences = ({theme}) => {
     //Handle Preferences
     const [preferences, setPreferences] = useState({});
 
@@ -101,6 +101,7 @@ const Preferences = () => {
                             handleSettings={(active) => handleFilter(item.node.slug, active)}
                             settingsName={item.node.slug}
                             type='settings'
+                            theme={theme}
                             {...item.node}
                             >
                                 {item.node.name}

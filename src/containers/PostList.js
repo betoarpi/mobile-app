@@ -7,7 +7,13 @@ import PostListSkeleton from '../containers/PostListSkeleton';
 import styled from 'styled-components';
 
 const PostList = (props) => {
-  const { theme, data, fetchMore, venuesList, organizersList } = props;
+  const {
+    theme,
+    data,
+    fetchMore,
+    venuesList,
+    organizersList,
+    preferences } = props;
 
   const loadMoreData = () => {
     fetchMore({
@@ -15,7 +21,6 @@ const PostList = (props) => {
       updateQuery: (previousResult, { fetchMoreResult }) => {
         const newEdges = fetchMoreResult.contentNodes.edges;
         const pageInfo = fetchMoreResult.contentNodes.pageInfo;
-        console.log(venuesList)
         return newEdges.length
           ? {
             contentNodes: {
@@ -30,6 +35,10 @@ const PostList = (props) => {
             eventOrganizers: {
               __typename: previousResult.eventOrganizers.__typename,
               edges: [...previousResult.eventOrganizers.edges]
+            },
+            districtSchools: {
+              __typename: previousResult.districtSchools.__typename,
+              edges: [...previousResult.districtSchools.edges]
             }
           } : previousResult;
       }
@@ -50,16 +59,36 @@ const PostList = (props) => {
         ListEmptyComponent={() => <PostListSkeleton />}
         renderItem={({ item }) => {
           const typename = item.node.__typename;
+
+          let school;
+
+          if(preferences.length > 0){
+            school =
+            item.node.districtSchools &&
+            item.node.districtSchools.edges &&
+            item.node.districtSchools.edges.length &&
+            item.node.districtSchools.edges[0].node.slug;
+          } else {
+            school = 1;
+          }
+
           switch (typename) {
             case 'Post':
-              return <Post theme={theme} {...item.node} />
+              return <Post
+                theme={theme}
+                preferences={preferences}
+                school={school}
+                {...item.node}
+              />
               break;
             case 'Event':
               return <EventPost
                 theme={theme}
                 venuesList={venuesList}
                 organizersList={organizersList}
+                school={school}
                 show={item.node.start_date !== null ? true : false}
+                preferences={preferences}
                 {...item.node}
               />
               break;

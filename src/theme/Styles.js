@@ -62,7 +62,7 @@ export const Icon = styled.Image`
   width: 24px;
 `
 export const FeaturedImage = styled.View`
-  background: ${({ theme }) => theme.colors.primaryLighten};
+  background: ${props => props.theme.colors.primaryLighten || 'rgb(235, 235, 235)'};
   flex: ${props => props.flexHeight || "0 0 120px"};
   width: 100%;
 `

@@ -7,17 +7,21 @@ import ScalableText from 'react-native-text';
 import { scaleText } from 'react-native-text';
 import { CardContainer, FeaturedImage, Header, Container, Title, Date, Location, LikesRow } from './Styles';
 import { IconContainer, Icon } from '../../theme/Styles';
+import Preferences from '../../screens/Preferences';
 /*import * as Icons from '../Icons';*/
 
 const Post = (props) => {
   const {
     categories,
     date,
+    districtSchools,
     featuredImage,
     title,
     excerpt,
     likes,
     postId,
+    preferences,
+    school,
     theme,
   } = props;
   const navigation = useNavigation();
@@ -26,58 +30,72 @@ const Post = (props) => {
   const regex = /(<([^>]+)>)/ig;
   var resultExce = excerpt.replace(regex, '');
 
-  return (
-    <CardContainer style={styles.shadow}>
-      {featuredImage &&
-        <TouchableWithoutFeedback onPress={handlePress}>
-          <FeaturedImage source={{ uri: featuredImage.sourceUrl }} style={styles.image}/>
-        </TouchableWithoutFeedback>
-      }
-      <View style={{ paddingHorizontal: 21 }}>
-        <Header>
-          {categories.edges.length > 0 &&
-            <IconContainer style={styles.iconContainer}>
-              <Icon style={styles.icon} source={{ uri: categories.edges[0].node.categoryIcon.categoryIcon.sourceUrl }} />
-            </IconContainer>
-          }
-          <Container style={{ paddingHorizontal: 0 }}>
-            <Title numberOfLines={1} onPress={handlePress}>
-              <ScalableText style={styleTitle}>
-                {title}
-              </ScalableText>
-            </Title>
-            <Date>
-              <ScalableText style={styleTitle}>
-                {moment(date).format('MMM DD, YYYY')}
-              </ScalableText>
-            </Date>
-            <Location>
-              <ScalableText style={styleTitle}>
-                Location missing
-              </ScalableText>
-            </Location>
-          </Container>
-          {categories.edges.length > 0 &&
-            categories.edges[0].node.slug === 'food' && <Icons.ArrowRight style={{ alignSelf: 'flex-start' }} fill={theme.colors.primary} />
-          }
-        </Header>
-        <Container>
-          {excerpt &&
-            <ScalableText numberOfLines={2} style={paragraph} >{resultExce}</ScalableText>
-          }
+  let isValid;
+  if(preferences.length > 0) {
+    isValid = preferences.includes(school);
+  } else {
+    isValid = true;
+  }
 
-          <LikesRow>
-            
-            {likes &&
-              <ScalableText style={{ marginLeft: 8, fontWeight: 'bold' }}>
-                {likes} Likes
-              </ScalableText>
-            }
-          </LikesRow>
-        </Container>
-      </View>
-    </CardContainer >
-  );
+  if(isValid !== false) {
+    return (
+        <CardContainer style={styles.shadow}>
+          {featuredImage &&
+            <TouchableWithoutFeedback onPress={handlePress}>
+              <FeaturedImage source={{ uri: featuredImage.sourceUrl }} style={styles.image}/>
+            </TouchableWithoutFeedback>
+          }
+          <View style={{ paddingHorizontal: 21 }}>
+            <Header>
+              {categories.edges.length > 0 &&
+                <IconContainer style={styles.iconContainer}>
+                  <Icon style={styles.icon} source={{ uri: categories.edges[0].node.categoryIcon.categoryIcon.sourceUrl }} />
+                </IconContainer>
+              }
+              <Container style={{ paddingHorizontal: 0 }}>
+                <Title numberOfLines={1} onPress={handlePress}>
+                  <ScalableText style={styleTitle}>
+                    {title}
+                  </ScalableText>
+                </Title>
+                <Date>
+                  <ScalableText style={styleTitle}>
+                    {moment(date).format('MMM DD, YYYY')}
+                  </ScalableText>
+                </Date>
+                <Location>
+                  <ScalableText style={styleTitle}>
+                    {districtSchools.edges.length > 0 &&
+                      districtSchools.edges[0].node.name
+                    }
+                  </ScalableText>
+                </Location>
+              </Container>
+              {categories.edges.length > 0 &&
+                categories.edges[0].node.slug === 'food' && <Icons.ArrowRight style={{ alignSelf: 'flex-start' }} fill={theme.colors.primary} />
+              }
+            </Header>
+            <Container>
+              {excerpt !== undefined &&
+                <ScalableText numberOfLines={2} style={paragraph} >{resultExce}</ScalableText>
+              }
+  
+              <LikesRow>
+                
+                {likes !== undefined &&
+                  <ScalableText style={{ marginLeft: 8, fontWeight: 'bold' }}>
+                    {likes} Likes
+                  </ScalableText>
+                }
+              </LikesRow>
+            </Container>
+          </View>
+        </CardContainer >
+    );
+  } else {
+    return null
+  }
+
 };
 
 const styles = StyleSheet.create({

@@ -137,8 +137,6 @@ const Home = (props) => {
         if (loading) return <PostListSkeleton />;
         if (error) return <DataError />;
         if (!data.contentNodes.edges.length) return <Text>There are no posts.</Text>;
-        
-        console.log(preferences)
 
         return (
           <PostList

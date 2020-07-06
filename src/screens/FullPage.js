@@ -2,21 +2,17 @@ import React from 'react';
 import {
   Dimensions,
   StyleSheet,
-  Text,
   ScrollView,
-  Image,
   SafeAreaView
 } from 'react-native';
 import { useQuery } from '@apollo/react-hooks';
 import gql from 'graphql-tag';
-import moment from 'moment';
 import HTML from 'react-native-render-html';
 
-import { Icon, IconContainer, PostHeader, PostHeaderContainer, Title, Container } from '../theme/Styles';
-import { Date } from '../components/Post/Styles';
-import Theme from '../theme/Theme';
+import { Container } from '../theme/Styles';
 import PostSkeleton from '../components/Post/PostSkeleton';
 import DataError from '../components/DataError';
+import Theme from '../theme/Theme';
 
 const PAGE_QUERY = gql`
   query PAGE_QUERY($id: ID!) {
@@ -27,7 +23,7 @@ const PAGE_QUERY = gql`
   }
 `
 
-const FullPage = ({ route }) => {
+const FullPage = ({ route, theme }) => {
   const databaseId = route.params.id;
   const { loading, error, data } = useQuery(PAGE_QUERY, {
     variables: { id: databaseId }
@@ -56,24 +52,6 @@ const FullPage = ({ route }) => {
   );
 };
 
-const styles = StyleSheet.create({
-  shadow: {
-    shadowColor: 'rgb(138, 138, 138)',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.21,
-    shadowRadius: 4,
-
-    elevation: 4,
-  },
-  mainImage: {
-    height: 212,
-    resizeMode: 'cover',
-  }
-});
-
 //HTML Component Styles
 const htmlStyles = {
   tagsStyles: {
@@ -83,7 +61,6 @@ const htmlStyles = {
       lineHeight: 26
     },
     a: {
-      color: Theme.colors.primary,
       fontSize: 18,
       marginBottom: 16,
       lineHeight: 26

@@ -5,7 +5,6 @@ import styled from 'styled-components';
 import { Paragraph } from '../theme/Styles';
 import ScalableText from 'react-native-text';
 import { Entypo } from '@expo/vector-icons';
-import Theme from '../theme/Theme';
 
 const SettingsItem = (props) => {
   const {
@@ -16,6 +15,7 @@ const SettingsItem = (props) => {
     handlePress,
     handleSettings,
     pageName,
+    theme,
     type } = props;
 
   return (
@@ -38,14 +38,14 @@ const SettingsItem = (props) => {
         </ScalableText>
         {type === 'settings' ?
           <Switch
-            trackColor={{ false: "#7e7e7e", true: `${Theme.colors.primary}` }}
+            trackColor={{ false: "#7e7e7e", true: `${theme.colors.primaryLighter}` }}
             thumbColor="#ffffff"
             ios_backgroundColor="#7e7e7e"
             onValueChange={handleSettings}
             value={active}
           />
           :
-          <Entypo name={'chevron-small-right'} size={24} color={Theme.colors.primary} />
+          <Entypo name={'chevron-small-right'} size={24} color={theme.colors.primary} />
         }
       </ListItem>
     </TouchableWithoutFeedback>

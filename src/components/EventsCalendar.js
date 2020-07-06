@@ -65,7 +65,7 @@ const EventsCalendar = (props) => {
     eventDatesArray = newState;
     setEventDates(eventDatesArray);
   }
-
+  console.log(theme.colors);
   return (
     <>
       <CalendarContainer style={styles.shadow}>

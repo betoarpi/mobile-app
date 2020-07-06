@@ -51,6 +51,7 @@ const APP_SETTINGS = gql`
         cardColor
         iconColor
         primaryColor
+        primaryLighter
         textColor
       }
       school_settings {

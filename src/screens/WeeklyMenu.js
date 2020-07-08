@@ -5,7 +5,7 @@ import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
 import PostSkeleton from '../components/Post/PostSkeleton';
 import DataError from '../components/DataError';
-import {Ionicons} from '@expo/vector-icons';
+import NoEvents from '../components/NoEvents';
 
 
 const WEEKLY_MENU_POSTS_QUERY = gql`
@@ -49,11 +49,16 @@ const WeeklyMenu = ({theme}) => {
         if (!data.tags.edges.length) return <Text>There are no posts.</Text>;
 
         return (
-            <TheMenu data={data} theme={theme} />
-          );
-        }}
+          <NoEvents>The menu is going to be available soon.</NoEvents>
+        );
+      }}
     </Query>
   );
 };
+
+/* return (
+    <TheMenu data={data} theme={theme} />
+  );
+*/
 
 export default WeeklyMenu;

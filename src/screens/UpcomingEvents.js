@@ -86,9 +86,8 @@ const UpcomingEvents = (props) => {
       {({ loading, error, data, fetchMore }) => {
         if (loading) return <PostListSkeleton />;
         if (error) return <DataError />;
-        if (!data.events.edges.length) return <NoEvents />;
+        if (!data.events.edges.length) return <NoEvents>There are no upcoming events to show at the moment.</NoEvents>;
         return (
-          <ScrollView>
           <EventsList
             data={data.events}
             venuesList={data.eventVenues}
@@ -98,7 +97,6 @@ const UpcomingEvents = (props) => {
             selectedDate={date}
             handleDate={handleDate}
           />
-         </ScrollView>
         );
       }}
     </Query >

@@ -11,6 +11,21 @@ const EventsCalendar = (props) => {
   const { theme, handleDate, events } = props;
 
   const [eventDates, setEventDates] = useState({});
+  let eventDatesArray = {};
+  useEffect(() => {
+    //Creates an object with event dates to mark in the calendar
+    (function handleMarkedDates() {
+      events.edges.map(item => {
+        const validCategory = item.node.eventCategories.edges[0].node.slug !== 'lunch-menu';
+        //const validPostType = item.node.__typename;
+        if (validCategory === true) {
+          eventDatesArray[moment(item.node.start_date).format('YYYY-MM-DD')] = { marked: true, selected: false }
+        }
+      })
+      setEventDates(eventDatesArray);
+    })();
+  }, [handleClick]);
+
   const [viewedDate, setViewedDate] = useState(moment().format('MMM DD, YYYY'));
 
   const renderArrow = (direction) => {
@@ -20,21 +35,6 @@ const EventsCalendar = (props) => {
       return <Entypo name={'chevron-small-right'} size={24} color={theme.colors.primary} />
     }
   };
-
-  let eventDatesArray = {};
-  useEffect(() => {
-    //Creates an object with event dates to mark in the calendar
-    (function handleMarkedDates() {
-      events.edges.map(item => {
-        const validCategory = item.node.eventCategories.edges[0].node.slug !== 'lunch-menu';
-        const validPostType = item.node.__typename;
-        if (validCategory === true) {
-          eventDatesArray[moment(item.node.start_date).format('YYYY-MM-DD')] = { marked: true, selected: false }
-        }
-      })
-      setEventDates(eventDatesArray);
-    })();
-  }, [handleClick])
 
   const handleClick = (day) => {
     const clickedDate = moment(day.dateString).format('YYYY-MM-DD');

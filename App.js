@@ -51,6 +51,7 @@ const APP_SETTINGS = gql`
         cardColor
         iconColor
         primaryColor
+        primaryLighter
         textColor
       }
       school_settings {
@@ -202,6 +203,8 @@ export default function App(props) {
               regular: '18px'
             }
           };
+
+          console.log(schoolTheme);
 
           const HomeStack = () => {
             return (

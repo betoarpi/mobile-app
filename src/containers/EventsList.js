@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet } from 'react-native';
 import EventPost from '../components/Post/EventPost';
 import PostListEnd from '../components/Post/PostListEnd';
@@ -10,6 +10,12 @@ import EventsCalendar from '../components/EventsCalendar';
 
 const PostList = (props) => {
   const { theme, data, fetchMore, venuesList, organizersList, selectedDate, handleDate } = props;
+
+  const [events, setEvents] = useState();
+
+  useEffect(() => {
+    setEvents(data.edges)
+  }, []);
 
   const loadMoreData = () => {
     fetchMore({
@@ -69,17 +75,9 @@ const PostList = (props) => {
   }
 
   return (
-    <PostListContainer>
+    <PostListContainer>    
       <List
-        sections={[{ data: data.edges }]}
-        keyExtractor={item => item.node.eventId.toString()}
-        ListEmptyComponent={() => <PostListSkeleton />}
-        renderItem={renderItem}
-        onEndReached={loadMoreData}
-        onEndReachedThreshold={0.5}
-        contentContainerStyle={styles.listContainer}
-        ListFooterComponent={handleFooter}
-        renderSectionHeader={() => (
+        ListHeaderComponent={() => (
           <>
             <EventsCalendar
               theme={theme}
@@ -88,12 +86,20 @@ const PostList = (props) => {
             />
           </>
         )}
+        data={events}
+        keyExtractor={item => item.node.eventId.toString()}
+        ListEmptyComponent={() => <PostListSkeleton />}
+        renderItem={renderItem}
+        onEndReached={loadMoreData}
+        onEndReachedThreshold={0.5}
+        contentContainerStyle={styles.listContainer}
+        ListFooterComponent={handleFooter}
       />
     </PostListContainer>
   );
 };
 
-const List = styled.SectionList`
+const List = styled.FlatList`
   padding: 20px 24px;
 `
 const PostListContainer = styled.View`

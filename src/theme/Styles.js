@@ -20,13 +20,17 @@ export const TextContainer = styled.View`
 export const Paragraph = styled.Text`
   color: ${({ theme }) => theme.colors.text};
   font-family: 'Lato-Regular';
-  font-size: ${({ theme }) => theme.fontSizes.regular};
-  margin-bottom:13px;
-  line-height: 26px;
+  margin-bottom: 13px;
   flex: 1;
+  font-size: ${props => props.fontSize || "20px"};
+  line-height: ${props => props.lineHeight || "24px"};
+  color: #4a4a4a;
 `
 export const Bold = styled(Paragraph)`
   font-family: 'Lato-Bold';
+  font-size: ${props => props.fontSize || "20px"};
+  line-height: ${props => props.lineHeight || "24px"};
+  color: #4a4a4a;
 `
 export const Title = styled.Text`
   color: ${({ theme }) => theme.colors.primary};

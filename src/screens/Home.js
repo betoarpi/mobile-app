@@ -144,7 +144,7 @@ const Home = (props) => {
             venuesList={data.eventVenues}
             organizersList={data.eventOrganizers}
             theme={theme}
-            preferences={preferences}
+            preferences={props.preferences}
             fetchMore={fetchMore} />
         );
       }}

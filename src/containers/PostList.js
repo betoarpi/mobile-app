@@ -14,7 +14,6 @@ const PostList = (props) => {
     venuesList,
     organizersList,
     preferences } = props;
-
   const loadMoreData = () => {
     fetchMore({
       variables: { cursor: data.pageInfo.endCursor },
@@ -46,6 +45,7 @@ const PostList = (props) => {
   }
 
   return (
+
     <PostListContainer>
       <List
         data={data.edges}
@@ -61,41 +61,42 @@ const PostList = (props) => {
           const typename = item.node.__typename;
 
           let school;
-
-          if(preferences.length > 0){
-            school =
-            item.node.districtSchools &&
-            item.node.districtSchools.edges &&
-            item.node.districtSchools.edges.length &&
-            item.node.districtSchools.edges[0].node.slug;
-          } else {
-            school = 1;
-          }
-
-          switch (typename) {
-            case 'Post':
-              return <Post
-                theme={theme}
-                preferences={preferences}
-                school={school}
-                {...item.node}
-              />
-              break;
-            case 'Event':
-              return <EventPost
-                theme={theme}
-                venuesList={venuesList}
-                organizersList={organizersList}
-                school={school}
-                show={item.node.start_date !== null ? true : false}
-                preferences={preferences}
-                {...item.node}
-              />
-              break;
-            default:
-              return null;
-              break;
-          }
+          
+            if(props.preferences.length > 0){
+              school =
+              item.node.districtSchools &&
+              item.node.districtSchools.edges &&
+              item.node.districtSchools.edges.length &&
+              item.node.districtSchools.edges[0].node.slug;
+            } else {
+              school = 1;
+            }
+            switch (typename) {
+              case 'Post':
+                return <Post
+                  theme={theme}
+                  preferences={props.preferences}
+                  school={school}
+                  {...item.node}
+                />
+                break;
+              case 'Event':
+                return <EventPost
+                  theme={theme}
+                  venuesList={venuesList}
+                  organizersList={organizersList}
+                  school={school}
+                  show={item.node.start_date !== null ? true : false}
+                  preferences={props.preferences}
+                  {...item.node}
+                />
+                break;
+              default:
+                return null;
+                break;
+            }
+            
+          
         }}
         onEndReached={loadMoreData}
         onEndReachedThreshold={0.5}

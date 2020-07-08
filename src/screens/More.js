@@ -39,8 +39,6 @@ const More = ({theme}) => {
     readData()
   }, []);
 
-  console.log(theme.colors.primary);
-
   const readData = async () => {
     try {
       const showNotifications = await AsyncStorage.getItem(STORAGE_KEY);
@@ -74,7 +72,7 @@ const More = ({theme}) => {
     }
   }
 
-  //clearStorage() //helper function to clear ALL storage, not of real use in PROD
+  clearStorage() //helper function to clear ALL storage, not of real use in PROD
   
   const handleNotifications = (notificationsState) => {
     //console.log(notificationsState);

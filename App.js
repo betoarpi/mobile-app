@@ -18,7 +18,7 @@ import Theme from './src/theme/Theme';
 /*import Icon from 'react-native-vector-icons/MaterialCommunityIcons';*/
 
 import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
+import { createStackNavigator, HeaderTitle } from '@react-navigation/stack';
 /*import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';*/
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Ionicons, Feather} from '@expo/vector-icons';
@@ -31,7 +31,7 @@ import FullPost from './src/screens/FullPost';
 import FullEvent from './src/screens/FullEvent';
 import FullPage from './src/screens/FullPage';
 import Preferences from './src/screens/Preferences';
-
+import Onboarding from './src/screens/Onboarding';
 import WeeklyMenu from './src/screens/WeeklyMenu';
 import UpcomingEvents from './src/screens/UpcomingEvents';
 import More from './src/screens/More';
@@ -82,10 +82,13 @@ export default function App(props) {
     setLogo(appSettings.school_settings && appSettings.school_settings.schoolLogo.sourceUrl);
   }, [appSettings]);
 
+  const [onboarding, setOnboarding] = useState(false);
+
   const readData = async () => {
     try {
       //Retrive alrady stored key from Preferences view
       let storedPreferences = await AsyncStorage.getItem('@save_preferences');
+      let storedOnboarding = await AsyncStorage.getItem('@save_onboarding');
       
       if (storedPreferences !== null) {
         let preferencesList = JSON.parse(storedPreferences);
@@ -95,6 +98,12 @@ export default function App(props) {
           value === true ? newList.push(filterKey) : null
         }
         setUserPreferences(newList);
+      }
+
+      if(storedOnboarding !== null) {
+        const hideOnboarding = JSON.parse(storedOnboarding);
+        console.log(hideOnboarding);
+        setOnboarding(hideOnboarding);
       }
     } catch (error) {
       console.log(error);
@@ -204,7 +213,81 @@ export default function App(props) {
             }
           };
 
-          console.log(schoolTheme);
+          const OnboardingStack = () => {
+            return (
+              <Stack.Navigator
+                headerMode='none'
+              >
+                {onboarding === false && <Stack.Screen
+                  name='Onboarding'
+                >
+                  {props => 
+                    <Layout>
+                      <Onboarding
+                        logo={logo}
+                        theme={schoolTheme}
+                        {...props}
+                      />
+                    </Layout>
+                  }
+                </Stack.Screen>}
+                <Stack.Screen
+                  name='Home'
+                  component={HomeTabs}
+                  {...props}
+                />
+              </Stack.Navigator>
+            )
+          }
+
+          const HomeTabs = () => {
+            return (
+              <MenuTabs.Navigator
+                barStyle={{ backgroundColor: schoolTheme.colors.card }}
+                activeColor={schoolTheme.colors.primary}
+                inactiveColor={schoolTheme.colors.icon}
+              >
+                <MenuTabs.Screen name="Home"
+                  component={HomeStack}
+                  options={{
+                    tabBarLabel: 'Home',
+                    tabBarIcon: ({ color }) => (
+                      <Ionicons name={'md-home'} size={24} color={color} />
+                    )
+                  }}
+                />
+                <MenuTabs.Screen name="Menu"
+                  options={{
+                    tabBarLabel: 'Weekly Menu',
+                    tabBarIcon: ({ color }) => (
+                      <Ionicons name={'md-restaurant'} size={24} color={color} />
+                    )
+                  }}
+                >
+                  {props => <Layout><WeeklyMenu {...props} theme={schoolTheme} /></Layout>}
+                </MenuTabs.Screen>
+                <MenuTabs.Screen name="Events"
+                  component={EventsStack}
+                  options={{
+                    tabBarLabel: 'Events',
+                    tabBarIcon: ({ color }) => (
+                      <Ionicons name={'md-calendar'} size={24} color={color} />
+                    )
+                  }}
+                />
+                <MenuTabs.Screen name="More"
+                  component={SettingsStack}
+                  style={{borderRadius: 30}}
+                  options={{
+                    tabBarLabel: 'More',
+                    tabBarIcon: ({ color }) => (
+                      <Feather name="more-horizontal" size={22} color={color} />
+                    )
+                  }}
+                />
+              </MenuTabs.Navigator>
+            );
+          }
 
           const HomeStack = () => {
             return (
@@ -316,49 +399,7 @@ export default function App(props) {
             <AppearanceProvider>
               <ThemeProvider theme={schoolTheme}>
                 <NavigationContainer theme={schoolTheme}>
-                  <MenuTabs.Navigator
-                    barStyle={{ backgroundColor: schoolTheme.colors.card }}
-                    activeColor={schoolTheme.colors.primary}
-                    inactiveColor={schoolTheme.colors.icon}
-                  >
-                    <MenuTabs.Screen name="Home"
-                      component={HomeStack}
-                      options={{
-                        tabBarLabel: 'Home',
-                        tabBarIcon: ({ color }) => (
-                          <Ionicons name={'md-home'} size={24} color={color} />
-                        )
-                      }}
-                    />
-                    <MenuTabs.Screen name="Menu"
-                      options={{
-                        tabBarLabel: 'Weekly Menu',
-                        tabBarIcon: ({ color }) => (
-                          <Ionicons name={'md-restaurant'} size={24} color={color} />
-                        )
-                      }}
-                    >
-                      {props => <Layout><WeeklyMenu {...props} theme={schoolTheme} /></Layout>}
-                    </MenuTabs.Screen>
-                    <MenuTabs.Screen name="Events"
-                      component={EventsStack}
-                      options={{
-                        tabBarLabel: 'Events',
-                        tabBarIcon: ({ color }) => (
-                          <Ionicons name={'md-calendar'} size={24} color={color} />
-                        )
-                      }}
-                    />
-                    <MenuTabs.Screen name="More"
-                      component={SettingsStack}
-                      style={{borderRadius: 30}}
-                      options={{
-                        tabBarLabel: 'More',
-                        tabBarIcon: ({ color }) => (
-                          <Feather name="more-horizontal" size={22} color={color} />                        )
-                      }}
-                    />
-                  </MenuTabs.Navigator>
+                  <OnboardingStack />
                 </NavigationContainer>
               </ThemeProvider>
             </AppearanceProvider>

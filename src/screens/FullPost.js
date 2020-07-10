@@ -5,13 +5,15 @@ import {
   Text,
   ScrollView,
   Image,
-  SafeAreaView
+  SafeAreaView,
+  View
 } from 'react-native';
 import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
 import moment from 'moment';
 import HTML from 'react-native-render-html';
 import ScalableText from 'react-native-text';
+import {Linking} from 'expo';
 import { Icon, IconContainer, PostHeader, PostHeaderContainer, Title, Container } from '../theme/Styles';
 import { Date } from '../components/Post/Styles';
 import Theme from '../theme/Theme';
@@ -45,7 +47,7 @@ const POST_QUERY = gql`
   }
 `
 
-const FullPost = ({ route }) => {
+const FullPost = ({ route, theme }) => {
   const postId = route.params.postId;
   return (
     <Query query={POST_QUERY} variables={{ postId }}>
@@ -70,22 +72,25 @@ const FullPost = ({ route }) => {
           <SafeAreaView>
             <ScrollView>
               {featuredImage && <Image source={{ uri: featuredImage.sourceUrl }} style={styles.mainImage} />}
-              <PostHeader style={styles.shadow}>
-                {categories.edges.length > 0 &&
-                  <IconContainer>
-                    <Icon style={{ width: 24, height: 24 }} source={{ uri: categories.edges[0].node.categoryIcon.categoryIcon.sourceUrl }} />
-                  </IconContainer>
-                }
-                <PostHeaderContainer>
-                  <Title>{title}</Title>
-                  <Date>{moment(date).format('MMM DD, YYYY')}</Date>
-                </PostHeaderContainer>
-              </PostHeader>
+              <View style={{ paddingTop: featuredImage ? 0 : 48}}>
+                <PostHeader style={styles.shadow}>
+                  {categories.edges.length > 0 &&
+                    <IconContainer>
+                      <Icon style={{ width: 24, height: 24 }} source={{ uri: categories.edges[0].node.categoryIcon.categoryIcon.sourceUrl }} />
+                    </IconContainer>
+                  }
+                  <PostHeaderContainer>
+                    <Title>{title}</Title>
+                    <Date>{moment(date).format('MMM DD, YYYY')}</Date>
+                  </PostHeaderContainer>
+                </PostHeader>
+              </View>
               <Container>
                 <HTML
                   html={cleanedContent}
                   baseFontStyle={{ fontFamily: 'Lato-Regular' }}
                   imagesMaxWidth={Dimensions.get('window').width - 48}
+                  onLinkPress={(evt, href) => { Linking.openURL(href)}}
                   {...htmlStyles} />
               </Container>
             </ScrollView>
@@ -124,7 +129,7 @@ const htmlStyles = {
       fontFamily: 'Lato-Light',
     },
     a: {
-      color: Theme.colors.primary,
+      //color: theme.colors.primary,
       fontSize: 18,
       marginBottom: 16,
       lineHeight: 26

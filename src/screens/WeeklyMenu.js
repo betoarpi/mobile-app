@@ -3,7 +3,7 @@ import {Text} from 'react-native';
 import TheMenu from '../containers/Menu';
 import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
-import PostSkeleton from '../components/Post/PostSkeleton';
+import PostListSkeleton from '../containers/PostListSkeleton';
 import DataError from '../components/DataError';
 import NoEvents from '../components/NoEvents';
 
@@ -44,7 +44,7 @@ const WeeklyMenu = ({theme}) => {
   return (
     <Query query={WEEKLY_MENU_POSTS_QUERY}>
       {({ loading, error, data }) => {
-        if (loading) return <PostSkeleton />;
+        if (loading) return <PostListSkeleton />;
         if (error) return <DataError />;
         if (!data.tags.edges.length) return <Text>There are no posts.</Text>;
 

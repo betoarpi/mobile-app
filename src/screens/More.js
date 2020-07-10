@@ -6,6 +6,7 @@ import gql from 'graphql-tag';
 import styled from 'styled-components';
 import AsyncStorage from '@react-native-community/async-storage';
 
+import PostListSkeleton from '../containers/PostListSkeleton';
 import DataError from '../components/DataError';
 import SettingsItem from '../components/SettingsItem';
 import { TextContainer, Paragraph, Separator, Title } from '../theme/Styles';
@@ -87,7 +88,7 @@ const More = ({theme}) => {
 
   const { loading, error, data } = useQuery(APP_SETTINGS);
   const ListSeparator = () => <Separator />
-  if (loading) return <Paragraph>Loading...</Paragraph>
+  if (loading) return <PostListSkeleton />
   if (error) return <DataError />
 
   const handlePress = (databaseId) => navigation.navigate('Full Page', { id: databaseId });

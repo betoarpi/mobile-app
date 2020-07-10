@@ -322,6 +322,17 @@ export default function App(props) {
                 >
                   {props => <Layout><FullPost {...props} theme={schoolTheme} /></Layout>}
                 </Stack.Screen>
+                <Stack.Screen name='Full Event'
+                  options={{
+                    title: 'Back to Feed',
+                    headerStyle: {
+                      backgroundColor: schoolTheme.colors.primary
+                    },
+                    headerTintColor: schoolTheme.colors.card,
+                  }}
+                >
+                  {props => <Layout><FullEvent {...props} theme={schoolTheme} /></Layout>}
+                </Stack.Screen>
               </Stack.Navigator>
             )
           }

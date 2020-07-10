@@ -7,6 +7,7 @@ import { View,
 import styled from 'styled-components';
 import { scaleText } from 'react-native-text';
 import AsyncStorage from '@react-native-community/async-storage';
+import * as Animatable from 'react-native-animatable';
 
 import PrimaryButton from '../components/PrimaryButton';
 import { Bold, Paragraph } from '../theme/Styles';
@@ -50,10 +51,26 @@ const Onboarding = props => {
     navigation.navigate('Home');
   }
   
+  const fadeIn = () => {
+    // Will change fadeAnim value to 1 in 5 seconds
+    Animated.timing(fadeAnim, {
+      toValue: 1,
+      duration: 5000
+    }).start();
+  };
+
+  const fadeOut = () => {
+    // Will change fadeAnim value to 0 in 5 seconds
+    Animated.timing(fadeAnim, {
+      toValue: 0,
+      duration: 5000
+    }).start();
+  };
+
   return (
     <SafeAreaView style={{flex: 1, backgroundColor:'#fafafa'}}>
-      <View style={styles.OnboardingLayout}>
-        <View style={styles.Logo}>
+      <View style={styles.OnboardingLayout }>
+        <Animatable.View style={styles.Logo} animation="fadeIn" iterationCount={1} direction="alternate" duration={1500}>
             <Image
               source={{ 
                 uri: `${logo}`,
@@ -62,8 +79,9 @@ const Onboarding = props => {
               }}
               resizeMode='contain'
             />
-        </View>
-        <TipsContainer>
+        </Animatable.View>
+        <TipsContainer> 
+          <Animatable.View animation="slideInRight" iterationCount={1} delay={0} easing="linear">
           <Tip>
             <IconLayer3 iconHeight={iconCircleHeight+"px"} color={hexToRgb(theme.colors.primary, 0.1)}>
               <IconLayer2 iconHeight={(iconCircleHeight - 10)+"px"} color={hexToRgb(theme.colors.primary, 0.2)}>
@@ -80,11 +98,13 @@ const Onboarding = props => {
                 </Bold>Get your school's daily news and updates.
             </Paragraph>
           </Tip>
+          </Animatable.View>
+          <Animatable.View animation="slideInRight" iterationCount={1} delay={500}>
           <Tip>
             <IconLayer3 iconHeight={iconCircleHeight+"px"} color={hexToRgb(theme.colors.primary, 0.1)}>
               <IconLayer2 iconHeight={(iconCircleHeight - 10)+"px"} color={hexToRgb(theme.colors.primary, 0.2)}>
                 <IconLayer1 iconHeight={(iconCircleHeight - 20)+"px"} color={hexToRgb(theme.colors.primary, 0.3)}>
-                  <Ionicons name={'md-home'} size={iconCircleHeight/2.5} color={theme.colors.primary} />
+                  <Ionicons name={'md-restaurant'} size={iconCircleHeight/2.5} color={theme.colors.primary} />
                 </IconLayer1>
               </IconLayer2>
             </IconLayer3>
@@ -92,15 +112,17 @@ const Onboarding = props => {
                 <Bold fontSize={fontSize+"px"} 
                       lineHeight={lineHeight+"px"} 
                       style={styles.tipText}>
-                Never miss a thing!
-                </Bold>Get your school's daily news and updates.
+                Plan ahead
+                </Bold> and discover the daily menus serving in your school.
             </Paragraph>
           </Tip>
+          </Animatable.View>
+          <Animatable.View animation="slideInRight" iterationCount={1} delay={1500}>
           <Tip>
             <IconLayer3 iconHeight={iconCircleHeight+"px"} color={hexToRgb(theme.colors.primary, 0.1)}>
               <IconLayer2 iconHeight={(iconCircleHeight - 10)+"px"} color={hexToRgb(theme.colors.primary, 0.2)}>
                 <IconLayer1 iconHeight={(iconCircleHeight - 20)+"px"} color={hexToRgb(theme.colors.primary, 0.3)}>
-                  <Ionicons name={'md-home'} size={iconCircleHeight/2.5} color={theme.colors.primary} />
+                  <Ionicons name={'md-calendar'} size={iconCircleHeight/2.5} color={theme.colors.primary} />
                 </IconLayer1>
               </IconLayer2>
             </IconLayer3>
@@ -108,14 +130,17 @@ const Onboarding = props => {
                 <Bold fontSize={fontSize+"px"} 
                       lineHeight={lineHeight+"px"} 
                       style={styles.tipText}>
-                Never miss a thing!
-                </Bold>Get your school's daily news and updates.
+                Stay on track,
+                </Bold> get a schedule for all social and academic events.
             </Paragraph>
           </Tip>
+          </Animatable.View>
         </TipsContainer>
-        <PrimaryButton text='Continue' onPress={handleOnboarding} color={theme.colors.primary}>
-          <Entypo name={'chevron-small-right'} size={24} color={'white'} />
-        </PrimaryButton>
+        <Animatable.View animation="slideInUp" iterationCount={1} delay={2000}>
+          <PrimaryButton text='Continue' onPress={handleOnboarding} color={theme.colors.primary}>
+            <Entypo name={'chevron-small-right'} size={24} color={'white'} />
+          </PrimaryButton>
+        </Animatable.View>
       </View>
     </SafeAreaView>
   );

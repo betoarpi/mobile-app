@@ -1,9 +1,9 @@
 {
   "expo": {
-    "name": "Wonder School",
-    "slug": "wonder-school",
+    "name": "Wonder KeyStone School",
+    "slug": "wonder-keystone-school",
     "privacy": "public",
-    "sdkVersion": "37.0.0",
+    "sdkVersion": "37.0.1",
     "platforms": [
       "ios",
       "android"
@@ -21,7 +21,7 @@
       "**/*"
     ],
     "ios": {
-      "bundleIdentifier": "com.wonder.wonderschool",
+      "bundleIdentifier": "com.wonder.wonderkeystoneschool",
       "supportsTablet": true,
       "infoPlist": {
         "UIBackgroundModes": [

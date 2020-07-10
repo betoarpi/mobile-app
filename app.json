@@ -3,7 +3,7 @@
     "name": "Wonder KeyStone School",
     "slug": "wonder-keystone-school",
     "privacy": "public",
-    "sdkVersion": "37.0.1",
+    "sdkVersion": "37.0.0",
     "platforms": [
       "ios",
       "android"

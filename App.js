@@ -72,6 +72,7 @@ export default function App(props) {
   const [appSettings, setAppSettings] = useState({});
 
   useEffect(() => {
+    loadAsync();
     readData();
   }, []);
   
@@ -101,7 +102,6 @@ export default function App(props) {
 
       if(storedOnboarding !== null) {
         const hideOnboarding = JSON.parse(storedOnboarding);
-        console.log(hideOnboarding);
         setOnboarding(hideOnboarding);
       }
     } catch (error) {
@@ -112,20 +112,16 @@ export default function App(props) {
   const saveData = async (key, value) => {
     try {
       await AsyncStorage.setItem(key, JSON.stringify(value));
-      //alert('Settings succesfully saved to the store.')
     } catch (error) {
       console.log(error);
-      //alert('Fail to save Settings to the store.')
     }
   }
 
   const clearStorage = async () => {
     try {
       await AsyncStorage.clear();
-      alert('Storage cleared!')
     } catch (error) {
       console.log(error)
-      alert('Error clearing storage!')
     }
   }
 
@@ -155,38 +151,20 @@ export default function App(props) {
     return Promise.all(cacheImages);
   }
   
-  useEffect(() => {
-    async function loadAsync() {
-      try {
-        SplashScreen.preventAutoHide();
-
-        // Load our initial navigation state
-        // setInitialNavigationState(await getInitialState());
-
-        // Load assets
-        await Asset.loadAsync([
-
-        ]);
-        // Load fonts
-        await Expo.Font.loadAsync({
-          //Ionicons.font,
-          'Lato-Regular': require('./src/fonts/Lato-Regular.ttf'),
-          'Lato-Black': require('./src/fonts/Lato-Black.ttf'),
-          'Lato-Bold': require('./src/fonts/Lato-Bold.ttf'),
-          'Lato-Italic': require('./src/fonts/Lato-Italic.ttf'),
-          'Lato-Light': require('./src/fonts/Lato-Light.ttf'),
-          
-          'Lato-Thin': require('./src/fonts/Lato-Thin.ttf'),
-          'Muli-Bold': require('./src/fonts/Muli-Bold.ttf'),
-        });
-      } catch (e) {
-        // We might want to provide this error information to an error reporting service
-        console.warn(e);
-      } 
-    }
-
-    loadAsync();
-  }, []);
+  async function loadAsync() {
+    // Load fonts
+    await Expo.Font.loadAsync({
+      //Ionicons.font,
+      'Lato-Regular': require('./src/fonts/Lato-Regular.ttf'),
+      'Lato-Black': require('./src/fonts/Lato-Black.ttf'),
+      'Lato-Bold': require('./src/fonts/Lato-Bold.ttf'),
+      'Lato-Italic': require('./src/fonts/Lato-Italic.ttf'),
+      'Lato-Light': require('./src/fonts/Lato-Light.ttf'),
+      
+      'Lato-Thin': require('./src/fonts/Lato-Thin.ttf'),
+      'Muli-Bold': require('./src/fonts/Muli-Bold.ttf'),
+    });
+  }
 
  return (
     loadingComplete === false ? 

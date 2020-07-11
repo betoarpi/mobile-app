@@ -25,7 +25,6 @@ const Onboarding = props => {
 
   const saveDataOnboarding = async (onboarding) => {
     try {
-      console.log('save onboarding'+onboarding);
       await AsyncStorage.setItem(ONBOARDING_KEY, JSON.stringify(onboarding));
     } catch (error) {
       console.log(error);

@@ -55,8 +55,6 @@ const FullEvent = ({ route }) => {
   const venuesList = route.params.venuesList;
   const organizersList = route.params.organizersList;
 
-  console.log(organizersList)
-
   return (
     <Query query={EVENT_QUERY} variables={{ eventId }}>
       {({ loading, error, data }) => {

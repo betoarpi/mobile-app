@@ -40,8 +40,6 @@ const More = ({theme}) => {
     readData()
   }, []);
 
-  console.log(theme.colors.primary);
-
   const readData = async () => {
     try {
       const showNotifications = await AsyncStorage.getItem(STORAGE_KEY);
@@ -58,27 +56,22 @@ const More = ({theme}) => {
   const saveData = async (notifications) => {
     try {
       await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(notifications));
-      //alert(`Data successfully saved to ${notifications}`);
     } catch (error) {
       console.log(error);
-      //alert('Failed to save the data to the storage');
     }
   }
   
   const clearStorage = async () => {
     try {
       await AsyncStorage.clear();
-      alert('Storage cleared!')
     } catch (error) {
       console.log(error)
-      alert('Error clearing storage!')
     }
   }
 
   //clearStorage() //helper function to clear ALL storage, not of real use in PROD
   
   const handleNotifications = (notificationsState) => {
-    //console.log(notificationsState);
     setNotifications(previousState => !previousState);
     saveData(notificationsState);
   }
@@ -94,8 +87,6 @@ const More = ({theme}) => {
   const handlePress = (databaseId) => navigation.navigate('Full Page', { id: databaseId });
 
   const handlePreferences = (pageName, theme) => navigation.navigate(pageName, theme);
-  
-  //console.log(navigation);
 
   const pages = data.appSettings.website_pages.pages;
   const school = data.appSettings.school_settings;

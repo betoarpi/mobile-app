@@ -28,7 +28,6 @@ const AppSettings = () => {
     const {loading, error, data} = useQuery(APP_SETTINGS);
     if(loading) console.log('Loading Settings...');
     if(error) console.log(error);
-    console.log(data);
 
     const [appSettings, setAppSettings] = useState({});
 

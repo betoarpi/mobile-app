@@ -62,7 +62,6 @@ const Preferences = ({theme}) => {
     const clearStorage = async () => {
         try {
           await AsyncStorage.clear();
-          console.log('Storage cleared!');
         } catch (error) {
           console.log(error);
         }

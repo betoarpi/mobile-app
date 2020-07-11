@@ -59,7 +59,6 @@ const EventsCalendar = (props) => {
     //validate whether there are events or not that matched the clicked date and select accordingly
     if (!newState[clickedDate]) {
       newState[clickedDate] = { selected: true };
-      console.log(`${clickedDate} has no events`);
     }
 
     eventDatesArray = newState;

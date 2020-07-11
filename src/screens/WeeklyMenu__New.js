@@ -32,8 +32,6 @@ const KeystoneMenu = () => {
     console.log(error);
     return <DataError />
   };
-  
-  console.log(data);
 
   return (
     <Text>Data loaded!</Text>

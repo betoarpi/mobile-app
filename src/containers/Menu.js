@@ -28,7 +28,6 @@ import { Dropdown } from 'react-native-material-dropdown';
 const entities = new Entities();
 
 const TheMenu = ({ data, theme }) => {
-  console.log(theme);
   const handleWeekDay = () => {
     if (moment().isoWeekday() <= 5) {
       return moment().format('ddd');
@@ -131,8 +130,6 @@ const TheMenu = ({ data, theme }) => {
     {
       value: 'Wells Middle School'
     }]
-
-  console.log(isMeal);
 
   return (
     <SafeAreaView style={styles.safeArea}>

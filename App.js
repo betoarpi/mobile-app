@@ -185,7 +185,7 @@ export default function App(props) {
 
  return (
     <>
-    {loadingComplete && 
+    {loadingComplete ? 
       <ApolloProvider client={client}>
         <Query query={APP_SETTINGS}>
           {({ loading, error, data }) => {
@@ -420,6 +420,8 @@ export default function App(props) {
           }}
         </Query>
       </ApolloProvider >
+      :  
+      <Text>Loading...</Text>
     }
     </>
   );

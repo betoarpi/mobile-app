@@ -34,6 +34,19 @@
       "package": "com.wonder.wonderschool",
       "versionCode": 1
     },
+    "hooks": {
+      "postPublish": [
+        {
+          "file": "sentry-expo/upload-sourcemaps",
+          "config": {
+            "organization": "wonder-media",
+            "project": "wonder-schools",
+            "authToken": "7e97c3c1fd024552954f87680521f5f78cbb8d495fa0406cafd0af18284de9c0",
+            "setCommits": true
+          }
+        }
+      ]
+    },
     "description": "",
     "githubUrl": "https://github.com/Wonder-School-Platform/mobile-app"
   }

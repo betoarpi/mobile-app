@@ -35,6 +35,12 @@ import WeeklyMenu from './src/screens/WeeklyMenu';
 import UpcomingEvents from './src/screens/UpcomingEvents';
 import More from './src/screens/More';
 
+import * as Sentry from 'sentry-expo';
+Sentry.init({
+  dsn: 'https://87a4c7f345804b3babab4f92142ce4b3@o419152.ingest.sentry.io/5328834',
+  enableInExpoDevelopment: true,
+  debug: true,
+});
 
 
 const MenuTabs = createBottomTabNavigator();

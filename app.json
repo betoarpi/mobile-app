@@ -1,14 +1,14 @@
 {
   "expo": {
-    "name": "Wonder KeyStone School",
-    "slug": "wonder-keystone-school",
+    "name": "Wonder KeyStone Schools App",
+    "slug": "wonder-keystone-school-app",
     "privacy": "public",
     "sdkVersion": "37.0.0",
     "platforms": [
       "ios",
       "android"
     ],
-    "version": "1.0.0",
+    "version": "0.1.0",
     "orientation": "portrait",
     "icon": "./src/images/icon.png",
     "splash": {

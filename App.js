@@ -1,6 +1,7 @@
 import 'react-native-gesture-handler';
 import {Asset} from 'expo-asset';
 import * as Font from 'expo-font';
+import { AppLoading } from 'expo';
 
 import React, {useState, useEffect} from 'react';
 import { Text } from 'react-native';
@@ -14,8 +15,6 @@ import AsyncStorage from '@react-native-community/async-storage';
 import { AppearanceProvider } from 'react-native-appearance';
 
 import { ThemeProvider } from 'styled-components';
-import Theme from './src/theme/Theme';
-/*import Icon from 'react-native-vector-icons/MaterialCommunityIcons';*/
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator, HeaderTitle } from '@react-navigation/stack';
@@ -146,6 +145,15 @@ export default function App(props) {
 
   //Load resources
   const [loadingComplete, setLoadingComplete] = useState(false);
+
+  const _cacheResourcesAsync = async () => {
+    const images = [require('./src/images/logo.png')];
+
+    const cacheImages = images.map(image =>{
+      return Asset.fromModule(image).downloadAsync();
+    });
+    return Promise.all(cacheImages);
+  }
   
   useEffect(() => {
     async function loadAsync() {
@@ -174,24 +182,23 @@ export default function App(props) {
       } catch (e) {
         // We might want to provide this error information to an error reporting service
         console.warn(e);
-      } finally {
-        setLoadingComplete(true);
-        SplashScreen.hide();
-      }
+      } 
     }
 
     loadAsync();
   }, []);
 
  return (
-    <>
-    {loadingComplete ? 
+    loadingComplete === false ? 
+      <AppLoading
+        startAsync={_cacheResourcesAsync}
+        onFinish={() => setLoadingComplete(true)}
+        onError={console.warn}
+      /> :
       <ApolloProvider client={client}>
         <Query query={APP_SETTINGS}>
           {({ loading, error, data }) => {
-            if (loading) return <Splash data={data ? true : false} logo={
-              data ? data.appSettings.school_settings.schoolLogo.sourceUrl : 'Loading...'
-            } />;
+            if (loading) return <Splash />;
             if (error) return <Text>Error! {error.message}</Text>;
 
             handleSettings(data);
@@ -420,10 +427,6 @@ export default function App(props) {
           }}
         </Query>
       </ApolloProvider >
-      :  
-      <Text>Loading...</Text>
-    }
-    </>
   );
     
 

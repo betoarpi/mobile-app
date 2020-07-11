@@ -1,5 +1,5 @@
 import React from 'react';
-import { StatusBar } from 'react-native';
+import { StatusBar } from 'expo-status-bar';
 
 import { MainLayout } from '../theme/Styles';
 
@@ -7,7 +7,7 @@ const Layout = (props) => {
   const { children } = props;
   return (
     <>
-      <StatusBar barStyle="light-content" />
+      <StatusBar style="light" />
       <MainLayout>
         {children}
       </MainLayout>

@@ -148,7 +148,7 @@ export default function App(props) {
   const [loadingComplete, setLoadingComplete] = useState(false);
   
   useEffect(() => {
-    async function loadResourcesAndDataAsync() {
+    async function loadAsync() {
       try {
         SplashScreen.preventAutoHide();
 
@@ -160,7 +160,7 @@ export default function App(props) {
 
         ]);
         // Load fonts
-        await Font.loadAsync({
+        await Expo.Font.loadAsync({
           //Ionicons.font,
           'Lato-Regular': require('./src/fonts/Lato-Regular.ttf'),
           'Lato-Black': require('./src/fonts/Lato-Black.ttf'),
@@ -180,244 +180,249 @@ export default function App(props) {
       }
     }
 
-    loadResourcesAndDataAsync();
+    loadAsync();
   }, []);
 
-  return (
-    <ApolloProvider client={client}>
-      <Query query={APP_SETTINGS}>
-        {({ loading, error, data }) => {
-          if (loading) return <Splash data={data ? true : false} logo={
-            data ? data.appSettings.school_settings.schoolLogo.sourceUrl : 'Loading...'
-          } />;
-          if (error) return <Text>Error! {error.message}</Text>;
+ return (
+    <>
+    {loadingComplete && 
+      <ApolloProvider client={client}>
+        <Query query={APP_SETTINGS}>
+          {({ loading, error, data }) => {
+            if (loading) return <Splash data={data ? true : false} logo={
+              data ? data.appSettings.school_settings.schoolLogo.sourceUrl : 'Loading...'
+            } />;
+            if (error) return <Text>Error! {error.message}</Text>;
 
-          handleSettings(data);
+            handleSettings(data);
 
-          const schoolTheme = {
-            dark: false,
-            colors: {
-              primary: data.appSettings.color_settings.primaryColor,
-              primaryLighten: data.appSettings.color_settings.primaryLighter,
-              background: data.appSettings.color_settings.backgroundColor,
-              card: data.appSettings.color_settings.cardColor,
-              text: data.appSettings.color_settings.textColor,
-              border: data.appSettings.color_settings.borderColor,
-              icon: data.appSettings.color_settings.iconColor,
-              overPrimary: data.appSettings.color_settings.cardColor,
-              shadow: 'rgb(138, 138, 138)',
-            },
-            fontSizes: {
-              schoolName: '22px',
-              regular: '18px'
+            const schoolTheme = {
+              dark: false,
+              colors: {
+                primary: data.appSettings.color_settings.primaryColor,
+                primaryLighten: data.appSettings.color_settings.primaryLighter,
+                background: data.appSettings.color_settings.backgroundColor,
+                card: data.appSettings.color_settings.cardColor,
+                text: data.appSettings.color_settings.textColor,
+                border: data.appSettings.color_settings.borderColor,
+                icon: data.appSettings.color_settings.iconColor,
+                overPrimary: data.appSettings.color_settings.cardColor,
+                shadow: 'rgb(138, 138, 138)',
+              },
+              fontSizes: {
+                schoolName: '22px',
+                regular: '18px'
+              }
+            };
+
+            const OnboardingStack = () => {
+              return (
+                <Stack.Navigator
+                  headerMode='none'
+                >
+                  {onboarding === false && <Stack.Screen
+                    name='Onboarding'
+                  >
+                    {props => 
+                      <Layout>
+                        <Onboarding
+                          logo={logo}
+                          theme={schoolTheme}
+                          {...props}
+                        />
+                      </Layout>
+                    }
+                  </Stack.Screen>}
+                  <Stack.Screen
+                    name='Home'
+                    component={HomeTabs}
+                    {...props}
+                  />
+                </Stack.Navigator>
+              )
             }
-          };
 
-          const OnboardingStack = () => {
-            return (
-              <Stack.Navigator
-                headerMode='none'
-              >
-                {onboarding === false && <Stack.Screen
-                  name='Onboarding'
+            const HomeTabs = () => {
+              return (
+                <MenuTabs.Navigator
+                  barStyle={{ backgroundColor: schoolTheme.colors.card }}
+                  activeColor={schoolTheme.colors.primary}
+                  inactiveColor={schoolTheme.colors.icon}
                 >
-                  {props => 
-                    <Layout>
-                      <Onboarding
-                        logo={logo}
-                        theme={schoolTheme}
-                        {...props}
-                      />
-                    </Layout>
-                  }
-                </Stack.Screen>}
-                <Stack.Screen
-                  name='Home'
-                  component={HomeTabs}
-                  {...props}
-                />
-              </Stack.Navigator>
-            )
-          }
+                  <MenuTabs.Screen name="Home"
+                    component={HomeStack}
+                    options={{
+                      tabBarLabel: 'Home',
+                      tabBarIcon: ({ color }) => (
+                        <Ionicons name={'md-home'} size={24} color={color} />
+                      )
+                    }}
+                  />
+                  <MenuTabs.Screen name="Menu"
+                    options={{
+                      tabBarLabel: 'Weekly Menu',
+                      tabBarIcon: ({ color }) => (
+                        <Ionicons name={'md-restaurant'} size={24} color={color} />
+                      )
+                    }}
+                  >
+                    {props => <Layout><WeeklyMenu {...props} theme={schoolTheme} /></Layout>}
+                  </MenuTabs.Screen>
+                  <MenuTabs.Screen name="Events"
+                    component={EventsStack}
+                    options={{
+                      tabBarLabel: 'Events',
+                      tabBarIcon: ({ color }) => (
+                        <Ionicons name={'md-calendar'} size={24} color={color} />
+                      )
+                    }}
+                  />
+                  <MenuTabs.Screen name="More"
+                    component={SettingsStack}
+                    style={{borderRadius: 30}}
+                    options={{
+                      tabBarLabel: 'More',
+                      tabBarIcon: ({ color }) => (
+                        <Feather name="more-horizontal" size={22} color={color} />
+                      )
+                    }}
+                  />
+                </MenuTabs.Navigator>
+              );
+            }
 
-          const HomeTabs = () => {
+            const HomeStack = () => {
+              return (
+                <Stack.Navigator>
+                  <Stack.Screen name='Home'
+                    options={{
+                      title: `${appSettings.school_settings && appSettings.school_settings.schoolName}`,
+                      headerStyle: {
+                        backgroundColor: schoolTheme.colors.primary
+                      },
+                      headerTintColor: schoolTheme.colors.card,
+                    }}
+                  >
+                    {props => 
+                      <Layout>
+                        <Home
+                          {...props}
+                          theme={schoolTheme}
+                          preferences={userPreferences}
+                        />
+                      </Layout>
+                    }
+                  </Stack.Screen>
+                  <Stack.Screen name='Full Post'
+                    options={{
+                      title: 'Back to Feed',
+                      headerStyle: {
+                        backgroundColor: schoolTheme.colors.primary
+                      },
+                      headerTintColor: schoolTheme.colors.card,
+                    }}
+                  >
+                    {props => <Layout><FullPost {...props} theme={schoolTheme} /></Layout>}
+                  </Stack.Screen>
+                  <Stack.Screen name='Full Event'
+                    options={{
+                      title: 'Back to Feed',
+                      headerStyle: {
+                        backgroundColor: schoolTheme.colors.primary
+                      },
+                      headerTintColor: schoolTheme.colors.card,
+                    }}
+                  >
+                    {props => <Layout><FullEvent {...props} theme={schoolTheme} /></Layout>}
+                  </Stack.Screen>
+                </Stack.Navigator>
+              )
+            }
+
+            const EventsStack = () => {
+              return (
+                <Stack.Navigator>
+                  <Stack.Screen name='Events'
+                    options={{
+                      title: 'Upcoming Events',
+                      headerStyle: {
+                        backgroundColor: schoolTheme.colors.primary
+                      },
+                      headerTintColor: schoolTheme.colors.card,
+                    }}
+                  >
+                    {props => <Layout><UpcomingEvents {...props} theme={schoolTheme} /></Layout>}
+                  </Stack.Screen>
+                  <Stack.Screen name='Full Event'
+                    options={{
+                      title: 'Back to Events Calendar',
+                      headerStyle: {
+                        backgroundColor: schoolTheme.colors.primary
+                      },
+                      headerTintColor: schoolTheme.colors.card,
+                    }}
+                  >
+                    {props => <Layout><FullEvent {...props} theme={schoolTheme} /></Layout>}
+                  </Stack.Screen>
+                </Stack.Navigator>
+              )
+            }
+
+            const SettingsStack = () => {
+              return (
+                <Stack.Navigator>
+                  <Stack.Screen name='More'
+                    options={{
+                      title: 'More About our School',
+                      headerStyle: {
+                        backgroundColor: schoolTheme.colors.primary
+                      },
+                      headerTintColor: schoolTheme.colors.card,
+                    }}
+                  >
+                    {props => <Layout><More {...props} theme={schoolTheme} /></Layout>}
+                  </Stack.Screen>
+                  <Stack.Screen name='Full Page'
+                    options={{
+                      title: 'Back to More About the School',
+                      headerStyle: {
+                        backgroundColor: schoolTheme.colors.primary
+                      },
+                      headerTintColor: schoolTheme.colors.card,
+                    }}
+                  >
+                    {props => <Layout><FullPage {...props} theme={schoolTheme} /></Layout>}
+                  </Stack.Screen>
+                  <Stack.Screen name='Preferences'
+                    options={{
+                      title: 'Select your interests',
+                      headerStyle: {
+                        backgroundColor: schoolTheme.colors.primary
+                      },
+                      headerTintColor: schoolTheme.colors.card,
+                    }}
+                  >
+                    {props => <Layout><Preferences {...props} theme={schoolTheme} /></Layout>}
+                  </Stack.Screen>
+                </Stack.Navigator>
+              )
+            }
+
             return (
-              <MenuTabs.Navigator
-                barStyle={{ backgroundColor: schoolTheme.colors.card }}
-                activeColor={schoolTheme.colors.primary}
-                inactiveColor={schoolTheme.colors.icon}
-              >
-                <MenuTabs.Screen name="Home"
-                  component={HomeStack}
-                  options={{
-                    tabBarLabel: 'Home',
-                    tabBarIcon: ({ color }) => (
-                      <Ionicons name={'md-home'} size={24} color={color} />
-                    )
-                  }}
-                />
-                <MenuTabs.Screen name="Menu"
-                  options={{
-                    tabBarLabel: 'Weekly Menu',
-                    tabBarIcon: ({ color }) => (
-                      <Ionicons name={'md-restaurant'} size={24} color={color} />
-                    )
-                  }}
-                >
-                  {props => <Layout><WeeklyMenu {...props} theme={schoolTheme} /></Layout>}
-                </MenuTabs.Screen>
-                <MenuTabs.Screen name="Events"
-                  component={EventsStack}
-                  options={{
-                    tabBarLabel: 'Events',
-                    tabBarIcon: ({ color }) => (
-                      <Ionicons name={'md-calendar'} size={24} color={color} />
-                    )
-                  }}
-                />
-                <MenuTabs.Screen name="More"
-                  component={SettingsStack}
-                  style={{borderRadius: 30}}
-                  options={{
-                    tabBarLabel: 'More',
-                    tabBarIcon: ({ color }) => (
-                      <Feather name="more-horizontal" size={22} color={color} />
-                    )
-                  }}
-                />
-              </MenuTabs.Navigator>
+              <AppearanceProvider>
+                <ThemeProvider theme={schoolTheme}>
+                  <NavigationContainer theme={schoolTheme}>
+                    <OnboardingStack />
+                  </NavigationContainer>
+                </ThemeProvider>
+              </AppearanceProvider>
             );
-          }
-
-          const HomeStack = () => {
-            return (
-              <Stack.Navigator>
-                <Stack.Screen name='Home'
-                  options={{
-                    title: `${appSettings.school_settings && appSettings.school_settings.schoolName}`,
-                    headerStyle: {
-                      backgroundColor: schoolTheme.colors.primary
-                    },
-                    headerTintColor: schoolTheme.colors.card,
-                  }}
-                >
-                  {props => 
-                    <Layout>
-                      <Home
-                        {...props}
-                        theme={schoolTheme}
-                        preferences={userPreferences}
-                      />
-                    </Layout>
-                  }
-                </Stack.Screen>
-                <Stack.Screen name='Full Post'
-                  options={{
-                    title: 'Back to Feed',
-                    headerStyle: {
-                      backgroundColor: schoolTheme.colors.primary
-                    },
-                    headerTintColor: schoolTheme.colors.card,
-                  }}
-                >
-                  {props => <Layout><FullPost {...props} theme={schoolTheme} /></Layout>}
-                </Stack.Screen>
-                <Stack.Screen name='Full Event'
-                  options={{
-                    title: 'Back to Feed',
-                    headerStyle: {
-                      backgroundColor: schoolTheme.colors.primary
-                    },
-                    headerTintColor: schoolTheme.colors.card,
-                  }}
-                >
-                  {props => <Layout><FullEvent {...props} theme={schoolTheme} /></Layout>}
-                </Stack.Screen>
-              </Stack.Navigator>
-            )
-          }
-
-          const EventsStack = () => {
-            return (
-              <Stack.Navigator>
-                <Stack.Screen name='Events'
-                  options={{
-                    title: 'Upcoming Events',
-                    headerStyle: {
-                      backgroundColor: schoolTheme.colors.primary
-                    },
-                    headerTintColor: schoolTheme.colors.card,
-                  }}
-                >
-                  {props => <Layout><UpcomingEvents {...props} theme={schoolTheme} /></Layout>}
-                </Stack.Screen>
-                <Stack.Screen name='Full Event'
-                  options={{
-                    title: 'Back to Events Calendar',
-                    headerStyle: {
-                      backgroundColor: schoolTheme.colors.primary
-                    },
-                    headerTintColor: schoolTheme.colors.card,
-                  }}
-                >
-                  {props => <Layout><FullEvent {...props} theme={schoolTheme} /></Layout>}
-                </Stack.Screen>
-              </Stack.Navigator>
-            )
-          }
-
-          const SettingsStack = () => {
-            return (
-              <Stack.Navigator>
-                <Stack.Screen name='More'
-                  options={{
-                    title: 'More About our School',
-                    headerStyle: {
-                      backgroundColor: schoolTheme.colors.primary
-                    },
-                    headerTintColor: schoolTheme.colors.card,
-                  }}
-                >
-                  {props => <Layout><More {...props} theme={schoolTheme} /></Layout>}
-                </Stack.Screen>
-                <Stack.Screen name='Full Page'
-                  options={{
-                    title: 'Back to More About the School',
-                    headerStyle: {
-                      backgroundColor: schoolTheme.colors.primary
-                    },
-                    headerTintColor: schoolTheme.colors.card,
-                  }}
-                >
-                  {props => <Layout><FullPage {...props} theme={schoolTheme} /></Layout>}
-                </Stack.Screen>
-                <Stack.Screen name='Preferences'
-                  options={{
-                    title: 'Select your interests',
-                    headerStyle: {
-                      backgroundColor: schoolTheme.colors.primary
-                    },
-                    headerTintColor: schoolTheme.colors.card,
-                  }}
-                >
-                  {props => <Layout><Preferences {...props} theme={schoolTheme} /></Layout>}
-                </Stack.Screen>
-              </Stack.Navigator>
-            )
-          }
-
-          return (
-            <AppearanceProvider>
-              <ThemeProvider theme={schoolTheme}>
-                <NavigationContainer theme={schoolTheme}>
-                  <OnboardingStack />
-                </NavigationContainer>
-              </ThemeProvider>
-            </AppearanceProvider>
-          );
-        }}
-      </Query>
-    </ApolloProvider >
+          }}
+        </Query>
+      </ApolloProvider >
+    }
+    </>
   );
+    
 
 };
